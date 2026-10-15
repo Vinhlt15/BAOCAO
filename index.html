@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Vinhlt15.QTI.vn</title>
+    <title>Vinhlt15.qti.vn</title>
     <style>
         html, body {
             margin: 0;
@@ -45,7 +45,6 @@
             color: #2c3e50;
             font-weight: bold;
         }
-        /* Style cho dòng chữ chạy bên phải */
         .marquee-right {
             width: 320px;
             overflow: hidden;
@@ -87,8 +86,10 @@
         <div class="tabs-left">
             <button class="tab-button active" onclick="openTab(event, 'CLL.html')">CLL</button>
             <button class="tab-button" onclick="openTab(event, 'RM.html')">RM</button>
-            <button class="tab-button" onclick="openTab(event, 'https://ho.mypt.vn/api/auth/powerbi/suckhoe')">Sức Khỏe</button>
-             <button class="tab-button" onclick="openTab(event, 'https://app.powerbi.com/groups/me/reports/0f0ed9e9-b093-4777-95ea-872c193b4625/736201893132557534e7?experience=power-bi')">CongNo</button>
+            
+            <!-- Các link web Power BI / API mở sang tab mới trình duyệt để tránh bị chặn -->
+            <button class="tab-button" onclick="window.open('https://ho.mypt.vn/api/auth/powerbi/suckhoe', '_blank')">Sức Khỏe</button>
+            <button class="tab-button" onclick="window.open('https://app.powerbi.com/groups/me/reports/0f0ed9e9-b093-4777-95ea-872c193b4625/736201893132557534e7?experience=power-bi', '_blank')">CongNo</button>
         </div>
 
         <!-- Dòng chữ chạy động bên phải -->
@@ -98,6 +99,7 @@
     </div>
 
     <div class="content-container">
+        <!-- Chỉ load các file nội bộ CLL.html hoặc RM.html trong iframe -->
         <iframe id="reportFrame" src="CLL.html"></iframe>
     </div>
 
