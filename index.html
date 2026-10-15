@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Quảng Trị Vinhlt15</title>
+    <title>QTIBaocao.Vinhlt15.vn</title>
     <style>
         html, body {
             margin: 0;
@@ -15,10 +15,15 @@
         }
         .tab-container {
             display: flex;
+            align-items: center;
             background: #2c3e50;
             padding: 10px 20px 0;
             height: 45px;
             box-sizing: border-box;
+            justify-content: space-between;
+        }
+        .tabs-left {
+            display: flex;
         }
         .tab-button {
             background: #34495e;
@@ -40,6 +45,28 @@
             color: #2c3e50;
             font-weight: bold;
         }
+        /* Style cho dòng chữ chạy bên phải */
+        .marquee-right {
+            width: 320px;
+            overflow: hidden;
+            white-space: nowrap;
+            box-sizing: border-box;
+        }
+        .marquee-text {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 12s linear infinite;
+            font-weight: bold;
+            font-size: 15px;
+            background: linear-gradient(45deg, #00ffcc, #ff007f, #ffcc00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(255,255,255,0.2);
+        }
+        @keyframes marquee {
+            0%   { transform: translate(0, 0); }
+            100% { transform: translate(-100%, 0); }
+        }
         .content-container {
             width: 100%;
             height: calc(100vh - 45px);
@@ -56,23 +83,20 @@
 <body>
 
     <div class="tab-container">
-        <!-- Tab 1: CLL -->
-        <button class="tab-button active" onclick="openTab(event, 'CLL.html')">CLL</button>
-        
-        <!-- Tab 2: RM -->
-        <button class="tab-button" onclick="openTab(event, 'RM.html')">RM</button>
+        <!-- Các nút tab bên trái -->
+        <div class="tabs-left">
+            <button class="tab-button active" onclick="openTab(event, 'CLL.html')">CLL</button>
+            <button class="tab-button" onclick="openTab(event, 'RM.html')">RM</button>
+            <button class="tab-button" onclick="openTab(event, 'https://ho.mypt.vn/api/auth/powerbi/suckhoe')">Sức Khỏe</button>
+        </div>
 
-        <!-- Tab 3: Sức Khỏe PowerBI -->
-        <button class="tab-button" onclick="openTab(event, 'https://ho.mypt.vn/api/auth/powerbi/suckhoe')">Sức Khỏe</button>
-        
-        <!-- ========================================== -->
-        <!-- KHI CÓ FILE HOẶC LINK MỚI, HÃY COPY DÒNG DƯỚI ĐÂY VÀ SỬA TÊN -->
-        <!-- <button class="tab-button" onclick="openTab(event, 'ten_file_moi.html')">Tên Tab</button> -->
-        <!-- ========================================== -->
+        <!-- Dòng chữ chạy động bên phải -->
+        <div class="marquee-right">
+            <span class="marquee-text">🔥 FPT Telecom QTI - Vững Mạnh 🚀 Chúc anh em hoàn thành xuất sắc nhiệm vụ! 🔥</span>
+        </div>
     </div>
 
     <div class="content-container">
-        <!-- Mặc định khi mở trang sẽ load file CLL.html -->
         <iframe id="reportFrame" src="CLL.html"></iframe>
     </div>
 
