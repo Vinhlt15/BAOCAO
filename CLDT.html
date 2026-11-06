@@ -10,21 +10,12 @@
     <style>
         body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f1f5f9; color: #0f172a; font-size: 0.95rem; }
         
-        /* Sub-navbar giống ảnh 2 */
-        .top-nav { background-color: #1e293b; color: #94a3b8; font-size: 0.8rem; font-weight: 600; }
-        .top-nav a { padding: 8px 16px; border-radius: 4px; transition: all 0.2s; }
-        .top-nav a.active { background-color: #0284c7; color: #ffffff; }
-
-        /* Card container mượt mà kéo dài full trang */
-        .card-container { background-color: #ffffff; border-radius: 12px; border: 1px solid #cbd5e1; box-shadow: 0 2px 4px rgba(0,0,0,0.04); margin-bottom: 24px; padding: 20px; }
-        .card-header-title { font-size: 1.1rem; font-weight: 800; color: #0f172a; border-left: 5px solid #0284c7; padding-left: 10px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; }
-        
+        /* Chữ rõ nét & Đường kẻ viền nổi bật */
         .text-address { color: #15803d; font-size: 0.85rem; font-weight: 600; display: block; margin-top: 4px; line-height: 1.4; }
         .badge-notok { background-color: #fee2e2; color: #991b1b; border: 1.5px solid #ef4444; font-size: 0.85rem; padding: 3px 8px; border-radius: 6px; }
         .badge-processing { background-color: #fef3c7; color: #92400e; border: 1.5px solid #f59e0b; font-size: 0.85rem; padding: 3px 8px; border-radius: 6px; }
         
-        /* Bỏ max-height cố định cuộn nội bộ để toàn bộ trang web cuộn tự nhiên trên mobile/PC */
-        .table-container { overflow-x: auto; border: 2px solid #334155; border-radius: 8px; }
+        .table-container { overflow-x: auto; max-height: 750px; border: 2px solid #334155; }
         
         /* Bảng chi tiết có đường kẻ chỉ dọc rõ ràng */
         table.custom-table { border-collapse: separate; border-spacing: 0; width: 100%; }
@@ -60,138 +51,116 @@
         .content-xl-box { background-color: #fff7ed; border-left: 4px solid #ea580c; padding: 8px 10px; border-radius: 6px; font-size: 0.85rem; color: #1e293b; line-height: 1.5; font-weight: 500; border: 1px solid #ffedd5; border-left-width: 4px; }
     </style>
 </head>
-<body class="p-2 sm:p-4 md:p-6">
+<body class="p-4 md:p-6">
 
-    <!-- SUB-NAVBAR GIỐNG ẢNH 2 -->
-    <div class="top-nav flex items-center gap-2 p-2 rounded-lg mb-4 overflow-x-auto">
-        <a href="#" class="whitespace-nowrap">CLL</a>
-        <a href="#" class="whitespace-nowrap">RM</a>
-        <a href="#" class="active whitespace-nowrap"><i class="fa-solid fa-list-check mr-1"></i>CLDT</a>
-        <a href="#" class="whitespace-nowrap">Sức Khỏe</a>
-        <a href="#" class="whitespace-nowrap">Cống hiến</a>
+    <!-- HEADER -->
+    <div class="flex flex-col md:flex-row justify-between items-center mb-6 bg-white p-6 rounded-xl shadow-md border-l-8 border-orange-500 border-y border-r border-gray-300">
+        <div>
+            <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 flex items-center gap-3">
+                <i class="fa-solid fa-chart-pie text-orange-500 text-3xl"></i> BÁO CÁO CHECKLIST & RỜI MẠNG CLDT 2026
+            </h1>
+            <p class="text-slate-600 text-base font-medium mt-1">Dữ liệu thực tế từ Hợp đồng rời mạng Chất lượng đường truyền & Tiến độ Checklist 2026</p>
+        </div>
+        <div class="mt-4 md:mt-0 text-right">
+            <span class="bg-blue-100 text-blue-900 text-sm font-bold px-4 py-2 rounded-full border border-blue-300 shadow-sm">
+                <i class="fa-regular fa-clock mr-1.5 text-blue-600"></i> Báo cáo Họp Chi Nhánh
+            </span>
+        </div>
     </div>
 
-    <!-- MAIN HEADER BAR -->
-    <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-900 text-white p-5 md:p-6 rounded-xl shadow-md mb-6 border-l-8 border-orange-500">
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <!-- METRICS / DASHBOARD KPI -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
+        <div class="bg-white p-5 rounded-xl shadow-sm border-2 border-gray-200 flex items-center justify-between">
             <div>
-                <h1 class="text-xl md:text-2xl font-extrabold flex items-center gap-3">
-                    <i class="fa-solid fa-chart-pie text-orange-400 text-2xl md:text-3xl"></i> BÁO CÁO CHECKLIST & RỜI MẠNG CLDT 2026
-                </h1>
-                <p class="text-slate-300 text-xs md:text-sm font-medium mt-1">Dữ liệu thực tế từ Hợp đồng rời mạng Chất lượng đường truyền & Tiến độ Checklist 2026</p>
+                <p class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Số Hợp Đồng RM CLDT</p>
+                <h3 class="text-3xl font-black text-red-600 mt-1" id="kpi-total">0</h3>
+                <p class="text-xs font-semibold text-slate-600 mt-1"><i class="fa-solid fa-database text-blue-600 mr-1"></i> Dữ liệu thực tế Sheet 1</p>
             </div>
-            <div class="flex items-center gap-2">
-                <span class="bg-blue-600/30 text-blue-200 text-xs font-bold px-3.5 py-1.5 rounded-full border border-blue-400/40 backdrop-blur-sm">
-                    <i class="fa-regular fa-clock mr-1"></i> Báo cáo Họp Chi Nhánh
-                </span>
+            <div class="w-14 h-14 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-2xl shadow-inner">
+                <i class="fa-solid fa-file-contract"></i>
+            </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl shadow-sm border-2 border-gray-200 flex items-center justify-between">
+            <div>
+                <p class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Tình Trạng: NOTOK</p>
+                <h3 class="text-3xl font-black text-red-700 mt-1" id="kpi-notok">0</h3>
+                <p class="text-xs font-semibold text-red-600 mt-1"><i class="fa-solid fa-circle-exclamation mr-1"></i>Chưa giải quyết xong</p>
+            </div>
+            <div class="w-14 h-14 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-2xl shadow-inner">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl shadow-sm border-2 border-gray-200 flex items-center justify-between">
+            <div>
+                <p class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Tình Trạng: ĐANG XỬ LÍ</p>
+                <h3 class="text-3xl font-black text-amber-600 mt-1" id="kpi-processing">0</h3>
+                <p class="text-xs font-semibold text-amber-600 mt-1"><i class="fa-solid fa-spinner fa-spin mr-1"></i>Đang theo sát hỗ trợ</p>
+            </div>
+            <div class="w-14 h-14 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center text-2xl shadow-inner">
+                <i class="fa-solid fa-sliders"></i>
+            </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl shadow-sm border-2 border-gray-200 flex items-center justify-between">
+            <div>
+                <p class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Lượt Checklist (Đã lọc trùng)</p>
+                <h3 class="text-3xl font-black text-blue-700 mt-1" id="kpi-checklists">0</h3>
+                <p class="text-xs font-semibold text-blue-600 mt-1"><i class="fa-solid fa-check-double mr-1"></i>Lịch sử hỗ trợ chuẩn xác</p>
+            </div>
+            <div class="w-14 h-14 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-2xl shadow-inner">
+                <i class="fa-solid fa-list-check"></i>
             </div>
         </div>
     </div>
 
-    <!-- SECTION 1: TỔNG QUAN KPI (CARD PHÂN VÙNG THEO ẢNH 2) -->
-    <div class="card-container">
-        <div class="card-header-title">
-            <span>| 1. Tổng quan chỉ số KPI</span>
-            <span class="text-xs text-slate-500 font-normal"><i class="fa-solid fa-database text-blue-500 mr-1"></i> Cập nhật thực tế</span>
+    <!-- CHARTS -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <div class="bg-white p-5 rounded-xl shadow-md border-2 border-gray-200">
+            <h2 class="text-base font-bold text-slate-800 mb-3 flex items-center">
+                <i class="fa-solid fa-chart-pie text-blue-600 mr-2 text-lg"></i> Phân Phối Theo Độ Tuổi HĐ
+            </h2>
+            <div class="h-60"><canvas id="ageChart"></canvas></div>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="bg-slate-50 p-4 rounded-xl border-2 border-slate-200 flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Số Hợp Đồng RM CLDT</p>
-                    <h3 class="text-3xl font-black text-red-600 mt-1" id="kpi-total">0</h3>
-                    <p class="text-xs font-semibold text-slate-600 mt-1"><i class="fa-solid fa-file-contract text-blue-600 mr-1"></i> Dữ liệu thực tế Sheet 1</p>
-                </div>
-                <div class="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-xl font-bold">
-                    <i class="fa-solid fa-file-contract"></i>
-                </div>
-            </div>
 
-            <div class="bg-slate-50 p-4 rounded-xl border-2 border-slate-200 flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Tình Trạng: NOTOK</p>
-                    <h3 class="text-3xl font-black text-red-700 mt-1" id="kpi-notok">0</h3>
-                    <p class="text-xs font-semibold text-red-600 mt-1"><i class="fa-solid fa-circle-exclamation mr-1"></i>Chưa giải quyết xong</p>
-                </div>
-                <div class="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-xl font-bold">
-                    <i class="fa-solid fa-triangle-exclamation"></i>
-                </div>
-            </div>
+        <div class="bg-white p-5 rounded-xl shadow-md border-2 border-gray-200">
+            <h2 class="text-base font-bold text-slate-800 mb-3 flex items-center">
+                <i class="fa-solid fa-user-tie text-orange-500 mr-2 text-lg"></i> Tình Trạng Theo Quản Lý
+            </h2>
+            <div class="h-60"><canvas id="managerChart"></canvas></div>
+        </div>
 
-            <div class="bg-slate-50 p-4 rounded-xl border-2 border-slate-200 flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Tình Trạng: ĐANG XỬ LÍ</p>
-                    <h3 class="text-3xl font-black text-amber-600 mt-1" id="kpi-processing">0</h3>
-                    <p class="text-xs font-semibold text-amber-600 mt-1"><i class="fa-solid fa-spinner fa-spin mr-1"></i>Đang theo sát hỗ trợ</p>
-                </div>
-                <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center text-xl font-bold">
-                    <i class="fa-solid fa-sliders"></i>
-                </div>
-            </div>
-
-            <div class="bg-slate-50 p-4 rounded-xl border-2 border-slate-200 flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Lượt Checklist (Đã lọc trùng)</p>
-                    <h3 class="text-3xl font-black text-blue-700 mt-1" id="kpi-checklists">0</h3>
-                    <p class="text-xs font-semibold text-blue-600 mt-1"><i class="fa-solid fa-check-double mr-1"></i>Lịch sử hỗ trợ chuẩn xác</p>
-                </div>
-                <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xl font-bold">
-                    <i class="fa-solid fa-list-check"></i>
-                </div>
-            </div>
+        <div class="bg-white p-5 rounded-xl shadow-md border-2 border-gray-200">
+            <h2 class="text-base font-bold text-slate-800 mb-3 flex items-center">
+                <i class="fa-solid fa-user-gear text-emerald-600 mr-2 text-lg"></i> Số Lượng Theo Kỹ Thuật
+            </h2>
+            <div class="h-60"><canvas id="techChart"></canvas></div>
         </div>
     </div>
 
-    <!-- SECTION 2: BIỂU ĐỒ PHÂN TÍCH (XẾP DỌC THEO CARD) -->
-    <div class="card-container">
-        <div class="card-header-title">
-            <span>| 2. Biểu đồ Thống kê & Phân tích Đa chiều</span>
-        </div>
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="bg-slate-50 p-4 rounded-xl border-2 border-slate-200">
-                <h2 class="text-sm font-bold text-slate-800 mb-3 flex items-center">
-                    <i class="fa-solid fa-chart-pie text-blue-600 mr-2"></i> Phân Phối Theo Độ Tuổi HĐ
-                </h2>
-                <div class="h-60"><canvas id="ageChart"></canvas></div>
-            </div>
-
-            <div class="bg-slate-50 p-4 rounded-xl border-2 border-slate-200">
-                <h2 class="text-sm font-bold text-slate-800 mb-3 flex items-center">
-                    <i class="fa-solid fa-user-tie text-orange-500 mr-2"></i> Tình Trạng Theo Quản Lý
-                </h2>
-                <div class="h-60"><canvas id="managerChart"></canvas></div>
-            </div>
-
-            <div class="bg-slate-50 p-4 rounded-xl border-2 border-slate-200">
-                <h2 class="text-sm font-bold text-slate-800 mb-3 flex items-center">
-                    <i class="fa-solid fa-user-gear text-emerald-600 mr-2"></i> Số Lượng Theo Kỹ Thuật
-                </h2>
-                <div class="h-60"><canvas id="techChart"></canvas></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- SECTION 3: BẢNG CHI TIẾT HỢP ĐỒNG KHÔNG BỊ GIỚI HẠN KHUNG CUỘN (KÉO DÀI XUỐNG DƯỚI) -->
-    <div class="card-container !p-0 overflow-hidden border-2 border-slate-700">
+    <!-- MAIN DATA TABLE -->
+    <div class="bg-white rounded-xl shadow-md border-2 border-slate-700 overflow-hidden mb-6">
         <!-- TOOLBAR / FILTERS -->
         <div class="p-4 bg-slate-900 text-white flex flex-col md:flex-row justify-between items-center gap-4">
-            <h2 class="text-base md:text-lg font-extrabold flex items-center gap-2">
-                <i class="fa-solid fa-table text-orange-400"></i> | 3. BẢNG CHI TIẾT HỢP ĐỒNG & LỊCH SỬ CHECKLIST
+            <h2 class="text-lg font-extrabold flex items-center gap-2">
+                <i class="fa-solid fa-table text-orange-400"></i> BẢNG CHI TIẾT HỢP ĐỒNG & LỊCH SỬ CHECKLIST
             </h2>
-            <div class="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
+            <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
                 <input type="text" id="searchInput" onkeyup="renderTable()" placeholder="🔍 Tìm Số HĐ, KH, Địa chỉ, KT, NDXL..." 
-                    class="px-3 py-1.5 text-xs md:text-sm text-gray-900 font-medium rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500 w-full md:w-56">
+                    class="px-3.5 py-2 text-sm text-gray-900 font-medium rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500 w-full md:w-64">
                 
-                <select id="statusFilter" onchange="renderTable()" class="px-2.5 py-1.5 text-xs md:text-sm text-gray-900 font-semibold rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white">
+                <select id="statusFilter" onchange="renderTable()" class="px-3 py-2 text-sm text-gray-900 font-semibold rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white">
                     <option value="">-- Tất cả Note --</option>
                     <option value="NOTOK">NOTOK</option>
                     <option value="ĐANG XỬ LÍ">ĐANG XỬ LÍ</option>
                 </select>
                 
-                <select id="managerFilter" onchange="renderTable()" class="px-2.5 py-1.5 text-xs md:text-sm text-gray-900 font-semibold rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white">
+                <select id="managerFilter" onchange="renderTable()" class="px-3 py-2 text-sm text-gray-900 font-semibold rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white">
                     <option value="">-- Tất cả Quản lý --</option>
                 </select>
 
-                <select id="techFilter" onchange="renderTable()" class="px-2.5 py-1.5 text-xs md:text-sm text-gray-900 font-semibold rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white">
+                <select id="techFilter" onchange="renderTable()" class="px-3 py-2 text-sm text-gray-900 font-semibold rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white">
                     <option value="">-- Tất cả Kỹ thuật --</option>
                 </select>
             </div>
