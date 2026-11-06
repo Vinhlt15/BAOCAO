@@ -8,77 +8,108 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f8fafc; color: #1e293b; }
-        .text-address { color: #16a34a; font-size: 0.76rem; font-weight: 500; display: block; margin-top: 3px; line-height: 1.3; }
-        .badge-notok { background-color: #fee2e2; color: #991b1b; border: 1px solid #f87171; }
-        .badge-processing { background-color: #fef3c7; color: #92400e; border: 1px solid #fbbf24; }
-        .table-container { overflow-x: auto; max-height: 720px; }
-        thead th { position: sticky; top: 0; z-index: 10; background-color: #0f172a; color: #ffffff; user-select: none; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f1f5f9; color: #0f172a; font-size: 0.95rem; }
+        
+        /* Chữ rõ nét & Đường kẻ viền nổi bật */
+        .text-address { color: #15803d; font-size: 0.85rem; font-weight: 600; display: block; margin-top: 4px; line-height: 1.4; }
+        .badge-notok { background-color: #fee2e2; color: #991b1b; border: 1.5px solid #ef4444; font-size: 0.85rem; padding: 3px 8px; border-radius: 6px; }
+        .badge-processing { background-color: #fef3c7; color: #92400e; border: 1.5px solid #f59e0b; font-size: 0.85rem; padding: 3px 8px; border-radius: 6px; }
+        
+        .table-container { overflow-x: auto; max-height: 750px; border: 2px solid #334155; }
+        
+        /* Bảng chi tiết có đường kẻ chỉ dọc rõ ràng */
+        table.custom-table { border-collapse: separate; border-spacing: 0; width: 100%; }
+        table.custom-table th, table.custom-table td { 
+            border-right: 2px solid #cbd5e1 !important; 
+            border-bottom: 2px solid #cbd5e1 !important; 
+        }
+        table.custom-table th:last-child, table.custom-table td:last-child {
+            border-right: none !important;
+        }
+
+        /* Tiêu đề bảng nổi bật & rõ ràng */
+        thead th { 
+            position: sticky; 
+            top: 0; 
+            z-index: 10; 
+            background-color: #0f172a; 
+            color: #ffffff; 
+            font-size: 0.95rem; 
+            font-weight: 700; 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            user-select: none;
+            padding: 12px 10px;
+            border-bottom: 3px solid #f97316 !important;
+        }
+
         .sortable { cursor: pointer; transition: background-color 0.2s; }
-        .sortable:hover { background-color: #1e293b; }
-        .cl-box { background-color: #f1f5f9; border-left: 3px solid #0284c7; padding: 6px 8px; border-radius: 4px; font-size: 0.75rem; margin-bottom: 6px; }
+        .sortable:hover { background-color: #1e293b; color: #fb923c; }
+
+        .cl-box { background-color: #f8fafc; border-left: 4px solid #0284c7; padding: 8px 10px; border-radius: 6px; font-size: 0.83rem; margin-bottom: 8px; border-top: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; }
         .cl-box:last-child { margin-bottom: 0; }
+        .content-xl-box { background-color: #fff7ed; border-left: 4px solid #ea580c; padding: 8px 10px; border-radius: 6px; font-size: 0.85rem; color: #1e293b; line-height: 1.5; font-weight: 500; border: 1px solid #ffedd5; border-left-width: 4px; }
     </style>
 </head>
 <body class="p-4 md:p-6">
 
     <!-- HEADER -->
-    <div class="flex flex-col md:flex-row justify-between items-center mb-6 bg-white p-5 rounded-xl shadow-sm border-l-8 border-orange-500 border-y border-r border-gray-200">
+    <div class="flex flex-col md:flex-row justify-between items-center mb-6 bg-white p-6 rounded-xl shadow-md border-l-8 border-orange-500 border-y border-r border-gray-300">
         <div>
-            <h1 class="text-2xl md:text-3xl font-bold text-gray-800 flex items-center gap-2">
-                <i class="fa-solid fa-chart-pie text-orange-500"></i> BÁO CÁO CHECKLIST & RỜI MẠNG CLDT 2026
+            <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 flex items-center gap-3">
+                <i class="fa-solid fa-chart-pie text-orange-500 text-3xl"></i> BÁO CÁO CHECKLIST & RỜI MẠNG CLDT 2026
             </h1>
-            <p class="text-gray-500 text-sm mt-1">Dữ liệu thực tế từ Hợp đồng rời mạng Chất lượng đường truyền & Tiến độ Checklist 2026</p>
+            <p class="text-slate-600 text-base font-medium mt-1">Dữ liệu thực tế từ Hợp đồng rời mạng Chất lượng đường truyền & Tiến độ Checklist 2026</p>
         </div>
         <div class="mt-4 md:mt-0 text-right">
-            <span class="bg-blue-50 text-blue-700 text-xs font-bold px-3 py-1.5 rounded-full border border-blue-200">
-                <i class="fa-regular fa-clock mr-1"></i> Báo cáo Họp Chi Nhánh
+            <span class="bg-blue-100 text-blue-900 text-sm font-bold px-4 py-2 rounded-full border border-blue-300 shadow-sm">
+                <i class="fa-regular fa-clock mr-1.5 text-blue-600"></i> Báo cáo Họp Chi Nhánh
             </span>
         </div>
     </div>
 
     <!-- METRICS / DASHBOARD KPI -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 flex items-center justify-between">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
+        <div class="bg-white p-5 rounded-xl shadow-sm border-2 border-gray-200 flex items-center justify-between">
             <div>
-                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Số Hợp Đồng RM CLDT</p>
-                <h3 class="text-3xl font-extrabold text-red-600 mt-1" id="kpi-total">0</h3>
-                <p class="text-xs text-gray-500 mt-1"><i class="fa-solid fa-database text-blue-500"></i> Dữ liệu thực tế Sheet 1</p>
+                <p class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Số Hợp Đồng RM CLDT</p>
+                <h3 class="text-3xl font-black text-red-600 mt-1" id="kpi-total">0</h3>
+                <p class="text-xs font-semibold text-slate-600 mt-1"><i class="fa-solid fa-database text-blue-600 mr-1"></i> Dữ liệu thực tế Sheet 1</p>
             </div>
-            <div class="w-12 h-12 bg-red-50 text-red-500 rounded-full flex items-center justify-center text-xl">
+            <div class="w-14 h-14 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-2xl shadow-inner">
                 <i class="fa-solid fa-file-contract"></i>
             </div>
         </div>
 
-        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 flex items-center justify-between">
+        <div class="bg-white p-5 rounded-xl shadow-sm border-2 border-gray-200 flex items-center justify-between">
             <div>
-                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Tình Trạng: NOTOK</p>
-                <h3 class="text-3xl font-extrabold text-red-700 mt-1" id="kpi-notok">0</h3>
-                <p class="text-xs text-red-500 mt-1">Chưa giải quyết xong</p>
+                <p class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Tình Trạng: NOTOK</p>
+                <h3 class="text-3xl font-black text-red-700 mt-1" id="kpi-notok">0</h3>
+                <p class="text-xs font-semibold text-red-600 mt-1"><i class="fa-solid fa-circle-exclamation mr-1"></i>Chưa giải quyết xong</p>
             </div>
-            <div class="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-xl">
+            <div class="w-14 h-14 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-2xl shadow-inner">
                 <i class="fa-solid fa-triangle-exclamation"></i>
             </div>
         </div>
 
-        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 flex items-center justify-between">
+        <div class="bg-white p-5 rounded-xl shadow-sm border-2 border-gray-200 flex items-center justify-between">
             <div>
-                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Tình Trạng: ĐANG XỬ LÍ</p>
-                <h3 class="text-3xl font-extrabold text-amber-600 mt-1" id="kpi-processing">0</h3>
-                <p class="text-xs text-amber-600 mt-1">Đang theo sát hỗ trợ</p>
+                <p class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Tình Trạng: ĐANG XỬ LÍ</p>
+                <h3 class="text-3xl font-black text-amber-600 mt-1" id="kpi-processing">0</h3>
+                <p class="text-xs font-semibold text-amber-600 mt-1"><i class="fa-solid fa-spinner fa-spin mr-1"></i>Đang theo sát hỗ trợ</p>
             </div>
-            <div class="w-12 h-12 bg-amber-50 text-amber-500 rounded-full flex items-center justify-center text-xl">
-                <i class="fa-solid fa-spinner fa-spin"></i>
+            <div class="w-14 h-14 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center text-2xl shadow-inner">
+                <i class="fa-solid fa-sliders"></i>
             </div>
         </div>
 
-        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 flex items-center justify-between">
+        <div class="bg-white p-5 rounded-xl shadow-sm border-2 border-gray-200 flex items-center justify-between">
             <div>
-                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Lượt Checklist Khảo Sát (Đã lọc trùng)</p>
-                <h3 class="text-3xl font-extrabold text-blue-600 mt-1" id="kpi-checklists">0</h3>
-                <p class="text-xs text-blue-500 mt-1">Lịch sử hỗ trợ KT chuẩn xác</p>
+                <p class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Lượt Checklist (Đã lọc trùng)</p>
+                <h3 class="text-3xl font-black text-blue-700 mt-1" id="kpi-checklists">0</h3>
+                <p class="text-xs font-semibold text-blue-600 mt-1"><i class="fa-solid fa-check-double mr-1"></i>Lịch sử hỗ trợ chuẩn xác</p>
             </div>
-            <div class="w-12 h-12 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center text-xl">
+            <div class="w-14 h-14 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-2xl shadow-inner">
                 <i class="fa-solid fa-list-check"></i>
             </div>
         </div>
@@ -86,82 +117,86 @@
 
     <!-- CHARTS -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
-            <h2 class="text-sm font-bold text-gray-700 mb-3 flex items-center">
-                <i class="fa-solid fa-chart-pie text-blue-500 mr-2"></i> Phân Phối Theo Độ Tuổi HĐ
+        <div class="bg-white p-5 rounded-xl shadow-md border-2 border-gray-200">
+            <h2 class="text-base font-bold text-slate-800 mb-3 flex items-center">
+                <i class="fa-solid fa-chart-pie text-blue-600 mr-2 text-lg"></i> Phân Phối Theo Độ Tuổi HĐ
             </h2>
             <div class="h-60"><canvas id="ageChart"></canvas></div>
         </div>
 
-        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
-            <h2 class="text-sm font-bold text-gray-700 mb-3 flex items-center">
-                <i class="fa-solid fa-user-tie text-orange-500 mr-2"></i> Tình Trạng Theo Quản Lý
+        <div class="bg-white p-5 rounded-xl shadow-md border-2 border-gray-200">
+            <h2 class="text-base font-bold text-slate-800 mb-3 flex items-center">
+                <i class="fa-solid fa-user-tie text-orange-500 mr-2 text-lg"></i> Tình Trạng Theo Quản Lý
             </h2>
             <div class="h-60"><canvas id="managerChart"></canvas></div>
         </div>
 
-        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
-            <h2 class="text-sm font-bold text-gray-700 mb-3 flex items-center">
-                <i class="fa-solid fa-user-gear text-emerald-500 mr-2"></i> Số Lượng Theo Kỹ Thuật
+        <div class="bg-white p-5 rounded-xl shadow-md border-2 border-gray-200">
+            <h2 class="text-base font-bold text-slate-800 mb-3 flex items-center">
+                <i class="fa-solid fa-user-gear text-emerald-600 mr-2 text-lg"></i> Số Lượng Theo Kỹ Thuật
             </h2>
             <div class="h-60"><canvas id="techChart"></canvas></div>
         </div>
     </div>
 
     <!-- MAIN DATA TABLE -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
+    <div class="bg-white rounded-xl shadow-md border-2 border-slate-700 overflow-hidden mb-6">
+        <!-- TOOLBAR / FILTERS -->
         <div class="p-4 bg-slate-900 text-white flex flex-col md:flex-row justify-between items-center gap-4">
-            <h2 class="text-base font-bold flex items-center gap-2">
+            <h2 class="text-lg font-extrabold flex items-center gap-2">
                 <i class="fa-solid fa-table text-orange-400"></i> BẢNG CHI TIẾT HỢP ĐỒNG & LỊCH SỬ CHECKLIST
             </h2>
             <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
-                <input type="text" id="searchInput" onkeyup="renderTable()" placeholder="Tìm Số HĐ, Tên KH, Địa chỉ, KT..." 
-                    class="px-3 py-1.5 text-xs text-gray-800 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500 w-full md:w-56">
+                <input type="text" id="searchInput" onkeyup="renderTable()" placeholder="🔍 Tìm Số HĐ, KH, Địa chỉ, KT, NDXL..." 
+                    class="px-3.5 py-2 text-sm text-gray-900 font-medium rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500 w-full md:w-64">
                 
-                <select id="statusFilter" onchange="renderTable()" class="px-3 py-1.5 text-xs text-gray-800 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                <select id="statusFilter" onchange="renderTable()" class="px-3 py-2 text-sm text-gray-900 font-semibold rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white">
                     <option value="">-- Tất cả Note --</option>
                     <option value="NOTOK">NOTOK</option>
                     <option value="ĐANG XỬ LÍ">ĐANG XỬ LÍ</option>
                 </select>
                 
-                <select id="managerFilter" onchange="renderTable()" class="px-3 py-1.5 text-xs text-gray-800 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                <select id="managerFilter" onchange="renderTable()" class="px-3 py-2 text-sm text-gray-900 font-semibold rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white">
                     <option value="">-- Tất cả Quản lý --</option>
                 </select>
 
-                <select id="techFilter" onchange="renderTable()" class="px-3 py-1.5 text-xs text-gray-800 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                <select id="techFilter" onchange="renderTable()" class="px-3 py-2 text-sm text-gray-900 font-semibold rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white">
                     <option value="">-- Tất cả Kỹ thuật --</option>
                 </select>
             </div>
         </div>
 
         <div class="table-container">
-            <table class="w-full text-left border-collapse text-xs">
+            <table class="custom-table text-left text-sm font-medium">
                 <thead>
                     <tr id="tableHeaderRow">
-                        <th onclick="sortTable('stt')" class="sortable p-3 text-center border-r border-slate-700 w-12">
+                        <th onclick="sortTable('stt')" class="sortable text-center w-14">
                             STT <i id="sort-stt" class="fa-solid fa-sort text-slate-400 ml-1"></i>
                         </th>
-                        <th onclick="sortTable('so_hd')" class="sortable p-3 border-r border-slate-700 w-28">
+                        <th onclick="sortTable('so_hd')" class="sortable w-32">
                             Số Hợp Đồng <i id="sort-so_hd" class="fa-solid fa-sort text-slate-400 ml-1"></i>
                         </th>
-                        <th onclick="sortTable('ky_thuat')" class="sortable p-3 border-r border-slate-700 w-28">
+                        <th onclick="sortTable('ky_thuat')" class="sortable w-32">
                             Kỹ Thuật <i id="sort-ky_thuat" class="fa-solid fa-sort text-slate-400 ml-1"></i>
                         </th>
-                        <th onclick="sortTable('quan_ly')" class="sortable p-3 border-r border-slate-700 w-24">
+                        <th onclick="sortTable('quan_ly')" class="sortable w-28">
                             Quản Lý <i id="sort-quan_ly" class="fa-solid fa-sort text-slate-400 ml-1"></i>
                         </th>
-                        <th onclick="sortTable('do_tuoi')" class="sortable p-3 text-center border-r border-slate-700 w-20">
+                        <th onclick="sortTable('do_tuoi')" class="sortable text-center w-24">
                             Độ Tuổi <i id="sort-do_tuoi" class="fa-solid fa-sort text-slate-400 ml-1"></i>
                         </th>
-                        <th onclick="sortTable('note')" class="sortable p-3 text-center border-r border-slate-700 w-24">
+                        <th onclick="sortTable('note')" class="sortable text-center w-28">
                             Note <i id="sort-note" class="fa-solid fa-sort text-slate-400 ml-1"></i>
                         </th>
-                        <th onclick="sortTable('ten_kh')" class="sortable p-3 border-r border-slate-700 min-w-[230px]">
+                        <th onclick="sortTable('ten_kh')" class="sortable min-w-[240px]">
                             Tên & Địa Chỉ Khách Hàng <i id="sort-ten_kh" class="fa-solid fa-sort text-slate-400 ml-1"></i>
+                        </th>
+                        <th onclick="sortTable('noi_dung_xl')" class="sortable min-w-[260px] bg-slate-800 text-orange-400">
+                            Nội Dung Xử Lý <i id="sort-noi_dung_xl" class="fa-solid fa-sort text-slate-400 ml-1"></i>
                         </th>
                     </tr>
                 </thead>
-                <tbody id="tableBody" class="divide-y divide-gray-200">
+                <tbody id="tableBody" class="divide-y-0">
                 </tbody>
             </table>
         </div>
@@ -169,7 +204,7 @@
 
     <!-- EMBEDDED DATA & SCRIPT -->
     <script>
-        const rawData = [{"stt": 1, "so_hd": "QTAAA3868", "ten_kh": "CAO THẮNG LỢI", "dia_chi": "35, Phan Bội Châu, Xã Gio Linh, Quảng Trị", "ky_thuat": "QTITI.HOANQ", "quan_ly": "MOPTH", "do_tuoi": "> 24T", "note": "NOTOK", "checklists": []}, {"stt": 2, "so_hd": "QTAAA6512", "ten_kh": "Nguyen Thi Hong Minh", "dia_chi": "19 Nguyễn Đức Thuận, Phường Nam Đông Hà, Quảng Trị", "ky_thuat": "QTITI.HUNGNH10", "quan_ly": "MOPTH", "do_tuoi": "> 12T", "note": "NOTOK", "checklists": [{"tg": "29/04/2026 17:17:31", "nv": "QTITI.HUNGNH10", "acc": "mopth", "ghi_chu_cc": "có hình k có tiếng, cs hdan notok nhờ kt htro", "ghi_chu": "QTITI.HUNGNH10 29042026 171730 lỗi loa tv care khg đi sửa tv khg đa ok.", "tt_dau_vao": "KH yêu cầu bảo trì khác", "nguyen_nhan": "Phục vụ nhu cầu phát sinh"}, {"tg": "24/09/2026 11:56:42", "nv": "QTITI.HUNGNH10", "acc": "mopth", "ghi_chu_cc": "KH báo mạng 3 hôm nay dùng như ko, cả wifi và truyền hình tivi chi cũng xem lag, kh ko chịu tắt bật báo k sửa thì cắt", "ghi_chu": "QTITI.HUNGNH10 24092026 115640 -Số Cls trong 3 tháng gần nhất 0\n- Liên hệ anhchị đến nhà gặp chủ hđ\n-Mô hình nhà 2 tầng\n-Mô hình thiết bị 3000hv2 t650 ap t2 ap củ chị trang đưa\n-Tổng thiết bị SD7\n- Nguyên nhân lỗi  moden hoạt động 36day ko reboot.phản ánh mạng yếu.vị trí moden phòng khách sau tv.\n-Phương án xử lý reboot moden.treo moden ra khỏi tv\n-TOOL Mỹ bảo ok\n- Vùng phủ noke.", "tt_dau_vao": "Không có tín hiệu quang (mkn)", "nguyen_nhan": "Chập chờn, treo (hoạt động không đúng chức năng ban đầu)"}]}, {"stt": 3, "so_hd": "QTAAA6038", "ten_kh": "Hoàng Minh Thuận", "dia_chi": "kiệt 48/20 Nguyễn Du, Phường Đông Hà, Quảng Trị", "ky_thuat": "QTITI.HUNGNH10", "quan_ly": "MOPTH", "do_tuoi": "> 12T", "note": "NOTOK", "checklists": [{"tg": "22/04/2026 16:35:18", "nv": "QTITI.HOANQ", "acc": "fpt_phuongnam.KienCT", "ghi_chu_cc": "QTAAA6038 - Hoàng Minh Thuận kh báo khong dùng được internet kiểm tra có ipwan suy hao -17.5 hổ trợ kh rb lại tb đổi kênh sóng not ok nhờ kt kiểm tra giúp", "ghi_chu": "QTITI.HOANQ 22042026 163517 lỗi RJ45 kết nối AP. đã xly", "tt_dau_vao": "KH yêu cầu bảo trì khác", "nguyen_nhan": "Phục vụ nhu cầu phát sinh"}, {"tg": "24/08/2026 12:03:17", "nv": "QTITI.HUNGNH10", "acc": "TienDM", "ghi_chu_cc": "Mini app -- Mạng quá yếu, ko làm việc được", "ghi_chu": "QTAAA6038 - 0918498222 - Hoàng Minh Thuận  Mạng quá yếu, ko làm việc được. Kỹ thuật kiểm tả giúp.  \n QTITI.HUNGNH10 23082026 105105 Liên hệ khg hẹn chiều xl\n QTITI.HUNGNH10 24082026 120300 -Số Cls trong 3 tháng gần nhất 0\n- Liên hệ anhchị chủ hđ\n-Mô hình nhà 2 tầng\n-Mô hình thiết bị 3000hv2 3000cv2 t650 cmr\n-Tổng thiết bị SD 7\n- Nguyên nhân lỗi  tầng 2 ko dùng đc mạng\n-Phương án xử lý bấm lại đầu j45 kết nối lại mô hình mesh.lan đạt 1G\n-TOOL Mỹ bảo ok\n- Vùng phủ ok", "tt_dau_vao": "Truy cập mạng chậm hoặc chập chờn", "nguyen_nhan": "Hỏng RJ45"}, {"tg": "10/10/2026 17:25:01", "nv": "QTITI.HUNGNH10", "acc": "fpt_phuongnam.NhuDH", "ghi_chu_cc": "Mini app --", "ghi_chu": "Mini app -- kh báo chậm chập chờn, tđv ktra có ipw, đã gửi ob, nhờ kt hỗ trợ giúp. \n QTITI.HUNGNH10 10102026 172500 -Số Cls trong 3 tháng gần nhất 0\n- Liên hệ anhchị đến nhà gặp con gái\n-Mô hình nhà 2 tầng\n-Mô hình thiết bị 3000hv2 3000cv2 t650\n-Tổng thiết bị SD 7\n- Nguyên nhân lỗi  khg báo mạng yếu không dùng được muốn hủy\n-Phương án xử lý KT kiểm tra cấu hình lại áp Tầng 2 care khg SD theo dõi thêm.báo lại còn gái báo lại cho mẹ\n-TOOL Mỹ bảo Ok", "tt_dau_vao": "Lỗi kết nối BOX và TV (TV không nhận tín hiệu từ Box)", "nguyen_nhan": "TV tắt"}, {"tg": "28/10/2026 09:04:28", "nv": "QTITI.HUNGNH10", "acc": "fpt_phuongnam.ThuyNT12", "ghi_chu_cc": "Yêu cầu app hifpt  liên hệ số 091222", "ghi_chu": "Yêu cầu app hifpt  liên hệ số 091222 kbm, kh báo hi fpt lỗi internet , nhờ kt htr giúp , onu -20.46 \n QTITI.HUNGNH10 27102026 182718 khách hàng hẹn mai qua nhà kiểm tra lần nữa không được thì nhổ mạng giúp chị\n QTITI.HUNGNH10 28102026 090423 KT đến nhà bảo trì..khg đả lắp sang Viettel.\nHỏi lý do khg báo chị làm việc trên web thuedientu không được nên chuyển sang Viettel em à thông cảm giùm chị.", "tt_dau_vao": "Truy cập mạng chậm hoặc chập chờn", "nguyen_nhan": "Đến nhà khách hàng kiểm tra KH yêu cầu hủy hợp đồng"}]}, {"stt": 4, "so_hd": "QTAAA7654", "ten_kh": "Trần Tữu", "dia_chi": "(16.7027918, 107.2638160) Lê Quý Đôn, Xã Diên Sanh, Quảng Trị", "ky_thuat": "QTITI.THUONGLC", "quan_ly": "NAHTL5", "do_tuoi": "> 6T", "note": "NOTOK", "checklists": [{"tg": "09/10/2026 08:26:36", "nv": "QTITI.THUONGLC", "acc": "System-SR", "ghi_chu_cc": "-", "ghi_chu": "QTITI.THUONGLC 09102026 082452 0987527774. kt liên hệ khg báo hủy hd. thiết bị đả rút ra không dùng nửa. kt tạo cskh nho cs nắm thêm thoongntin care thêm khg.", "tt_dau_vao": "Có IP WAN, không truy cập được", "nguyen_nhan": "Liên hệ khách hàng yêu cầu hủy hợp đồng"}, {"tg": "13/10/2026 05:41:40", "nv": "QTITI.THUONGLC", "acc": "nahtl5", "ghi_chu_cc": "KH gọi lên tđ báo cắt mạng vì k có nhu cầu sử dụng, cus liên hệ KH báo mạng trong quá trình dùng cứ bị gặp sự cố mãi, box giọng nói khi được khi ko, KH thấy bâts tiện nên hni đã gọi mạng khác tới lắp, tp KH cho KT ghé bảo trì vì trong quá trinh dùng k thấy bảo trì lần nào nhưng KH k chịu, nhâts quyết cắt. Ca này e đang thấy có list tđ, a ghé nhà xem sao nhé", "ghi_chu": "QTITI.THUONGLC 12102026 182451 0987527774. kt đến nhà khg đả lắp vnpt. thuyết phục thêm xu lí cho khg not ok. nhất quyết cắt. khg chưa có checklissh xu lí trước đó. tạo cskh nắm thêm thông tin", "tt_dau_vao": "KH không cung cấp rõ tình trạng lỗi hoặc KH có khiếu nại RM", "nguyen_nhan": "Đến nhà khách hàng kiểm tra KH yêu cầu hủy hợp đồng"}]}, {"stt": 5, "so_hd": "QTAAA6005", "ten_kh": "NGUYỄN THỊ THÙY SÂM", "dia_chi": "12/19 Trần Quý Cáp, Phường Nam Đông Hà, Tỉnh Quảng Trị", "ky_thuat": "QTITI.NHATLV1", "quan_ly": "NAHTL5", "do_tuoi": "> 12T", "note": "NOTOK", "checklists": [{"tg": "27/08/2026 18:43:18", "nv": "QTITI.HUYND11", "acc": "ThuongNTH52", "ghi_chu_cc": "khách hàng báo mạng ko xem truyen hinh dlk xoay tron", "ghi_chu": "QTITI.HUYND11 27082026 184317 0974171111 khg không nghe số lạ. qua nhà khg báo đã sd bth. kiểm tra tổng quát không phát sinh bất thường. kt đóng checklist nhờ khg theo dõi thêm", "tt_dau_vao": "Truyền hình không xem được một vài kênh", "nguyen_nhan": "Chập chờn, treo (Hoạt động không ổn định)"}, {"tg": "06/10/2026 17:50:11", "nv": "QTITI.NHATLV1", "acc": "nahtl5", "ghi_chu_cc": "Kh báo mạng quá yếu, kh có ý định dùng hết tháng huỷ chứ báo trì quá nhiều lần rồi mà vẫn k khắc phục được. Trong nhà toàn dùng thiết bị thông minh như robot, cửa tự động mà k kết nối được wifi nhừo Kt ghé xử lý dứt điểm", "ghi_chu": "QTITI.NHATLV1 06102026 151943 hẹn lại khg\n QTITI.NHATLV1 06102026 174906 khg báo ych nhiều lần. từ lúc lắp đặt. đã hỗ trợ khg check dvu bt nhưng khg báo yếu. khg k dy btri tạo cskh nhờ cs hỗ trơn thêm", "tt_dau_vao": "Có IP WAN, không truy cập được", "nguyen_nhan": "Liên hệ khách hàng yêu cầu hủy hợp đồng"}]}, {"stt": 6, "so_hd": "QTAAA7872", "ten_kh": "Nguyễn Duy Phong", "dia_chi": "Tạp Hoá Thông Gái Thôn Quy Thiện, Xã Vĩnh Định, Quảng Trị", "ky_thuat": "QTITI.TRUONGTN1", "quan_ly": "NAHTL5", "do_tuoi": "> 6T", "note": "NOTOK", "checklists": [{"tg": "18/10/2026 12:06:38", "nv": "QTITI.TRUONGTN1", "acc": "ChauHB2", "ghi_chu_cc": "KH tạo YCHT trên app HiFPT", "ghi_chu": "QTAAA7872 - Nguyễn Duy Phong 0375319092, KH tạo YCHT trên app HiFPT Lỗi Truyền hình, hiện tai ktra EnableOfflineLOSi ko ip chuyen KT nam tt den nha ktra giup kh \n \n QTITI.TRUONGTN1 18102026 095409 kt xl k kịp có care kh chiều xl, nh oke\n QTITI.TRUONGTN1 18102026 120636 -Số Cls trong 3 tháng gần nhất \n-Liên hệ anhchị         SDT\n-Mô hình nhà 1 tần\n-Mô hình thiết bị hv2 box 650\n-Tổng thiết bị SD.5\n-Nguyên nhân lỗi  kh cắt nhầm dây cap  remote lỗi nói k được\n-Phương án xử lý nối lại cap cho kh,  bảo hành remote\n-TOOL Mỹ bảo  oke\n-Vùng phủ oke", "tt_dau_vao": "Lỗi không sử dụng được tính năng điều khiển giọng nói", "nguyen_nhan": "Hư míc"}]}, {"stt": 7, "so_hd": "QTFD00619", "ten_kh": "Nguyen Thi Tam", "dia_chi": "4 Nguyen Trai, Xa Khe Sanh, Quang Tri", "ky_thuat": "QTITI.NINHNV1", "quan_ly": "NAHTL5", "do_tuoi": "> 24T", "note": "NOTOK", "checklists": [{"tg": "31/10/2026 18:46:31", "nv": "QTITI.KIETNA", "acc": "nahtl5", "ghi_chu_cc": "KH báo mạng k sd được, nhờ KT ghé hỗ trợ", "ghi_chu": "QTITI.KIETNA 31102026 170423 đến nhà khg. khg báo hủy hđ r", "tt_dau_vao": "Không có tín hiệu quang (mkn)", "nguyen_nhan": "Liên hệ Khách hàng báo sử dụng bình thường"}]}, {"stt": 8, "so_hd": "QTAAA6070", "ten_kh": "Nguyễn Duy Hải", "dia_chi": "kiệt 229/5 Lê Duẩn, Phường Nam Đông Hà, Quảng Trị", "ky_thuat": "QTITI.NHATLV1", "quan_ly": "NAHTL5", "do_tuoi": "> 12T", "note": "NOTOK", "checklists": []}, {"stt": 9, "so_hd": "QTAAA3099", "ten_kh": "NGUYỄN QUANG TRUNG", "dia_chi": "K13 Đặng Thái Thân, Phường Nam Đông Hà, Quảng Trị", "ky_thuat": "QTITI.BINHNT8", "quan_ly": "THUONGNTH52", "do_tuoi": "> 24T", "note": "NOTOK", "checklists": [{"tg": "30/04/2026 09:55:12", "nv": "QTITI.SIEUTM", "acc": "ThuongNTH52", "ghi_chu_cc": "khách hàng báo ko sử dụng được đièu khiển giọng nói, mới mua điều khiển mới đây giờ lại ko dùng được", "ghi_chu": "QTITI.SIEUTM 30042026 095511 Gặp vợ khg 0905123919. Kt kiểm tra và ghép nối remote và voice sử dụng ok. Kiểm tra ok cùng khg", "tt_dau_vao": "Lỗi không sử dụng được tính năng điều khiển giọng nói", "nguyen_nhan": "Chưa ghép nối"}, {"tg": "11/07/2026 14:15:12", "nv": "QTITI.BINHNT8", "acc": "mopth", "ghi_chu_cc": "KH báo mạng quá yếu, gọi zalo cho con mà đứng hình k xem đc, tivi xem bóng đứng hình, nhờ KT thay thiết bị lại xem chứ chú ni ko cải thiện là chú hủy", "ghi_chu": "QTITI.BINHNT8 11072026 095103 1390905123919 lh ko nghe may.\n QTITI.BINHNT8 11072026 141215 0905123919 ktv lh nhíu lan ko nghe may. den nha khoa cua. chuyen tt cs ho tro cskh them.", "tt_dau_vao": "Wifi sóng tốt - kết nối được nhưng truy cập chậm hoặc chập chờn", "nguyen_nhan": "Liên hệ khách hàng yêu cầu hủy hợp đồng"}, {"tg": "05/08/2026 11:08:17", "nv": "QTITI.BINHNT8", "acc": "mopth", "ghi_chu_cc": "box lỗi nhờ KT thay box tsd", "ghi_chu": "QTITI.BINHNT8 05082026 110255 checklist lap 2. loi box 650 ko lien khet dc dieu khien. thay the box bao hanh. 0905123919 chu Trung.\n QTITI.BINHNT8 05082026 110739 -Số Cls trong 3 tháng gần nhất 2\n- Liên hệ anhchị0905123919 chu Trung\n-Mô hình nhà 2 tang\n-Mô hình thiết bị ac1000hi  ac1200c  box 650 LAN\n-Tổng thiết bị SD 7\n- Nguyên nhân lỗi  box650 loi\n-Phương án xử lý thay the\n-TOOL Mỹ bảo da check\n- Vùng phủ dam bao", "tt_dau_vao": " Truyền hình mất hình/ mất tiếng một vài kênh", "nguyen_nhan": "Chập chờn, treo (Hoạt động không ổn định)"}, {"tg": "27/10/2026 16:28:51", "nv": "QTITI.BINHNT8", "acc": "DaisyNextgen", "ghi_chu_cc": "QTAAA3099 - 090919 - Kênh tiếp nhận live-chat - Sender ID 6adf246ff3db5 - SĐT KH cung cấp 090919 - Báo hỏng dịch vụ", "ghi_chu": "QTAAA3099 - 090919 - 6adf246ff3db5 - Khách hàng đã yêu cầu di chuyển vị trí modem trong nhà để cải thiện tốc độ kết nối internet. Khách hàng chưa thực hiện Autofix và cần hỗ trợ trực tiếp. Cần KTV hỗ trợ tại nhà.\n QTITI.BINHNT8 27102026 114721 ktv xu ly khu vuc Cam lo xa pop chua den dc nha khg.\n QTITI.BINHNT8 27102026 162851 ktv lh khg bao di Vinh linh roi, luc mo.ve chu goi. tam.thoi dang dung bt. dong cl bang 4g ko vao nha khg.", "tt_dau_vao": "Không truy cập được một số dịch vụ hoặc website", "nguyen_nhan": "Liên hệ Khách hàng báo sử dụng bình thường"}]}, {"stt": 10, "so_hd": "QTFD01054", "ten_kh": "NGUYỄN ĐĂNG PHÚ", "dia_chi": "Kiệt 265 Bà Triệu (Nhà cuối cùng bên tay trái ), Phường Đông Hà, Quảng Trị", "ky_thuat": "QTITI.BINHNT8", "quan_ly": "THUONGNTH52", "do_tuoi": "> 24T", "note": "NOTOK", "checklists": [{"tg": "01/06/2026 11:08:35", "nv": "QTITI.BINHNT8", "acc": "KhachHang", "ghi_chu_cc": "Mạng yếu", "ghi_chu": "QTFD01054 - 0334774774 - NGUYỄN ĐĂNG PHÚ KH báo qua hifpt   Lỗi Internet\n,KB2 k lh KH , nhờ ktv hotro.Chat OB\n QTITI.BINHNT8 01062026 110834 -Số Cls trong 3 tháng gần nhất 3\n- Liên hệ anhchị a Phú, sdt 0334774774\n-Mô hình nhà 2 tang\n-Mô hình thiết bị ax3000hi  AP ac1200c  box 4kfx6\n-Tổng thiết bị SD 7\n- Nguyên nhân lỗi  cap5 ket noi modem den AP loi. hong, mat ket noi den AP, tang 2 truy cap wifi ko đc\n-Phương án xử lý check loi cap5 bi chut can nhieu doan, care khg thay the cap 5 theo cs gia cong ty 11k1 phat sinh khoang 8- 10m. khg ko dong y chi phi phat sinh, tao srmobile cbuyen tt cs cskh them ve thu tuc ích vu phi ohat sinh. ktv da thay cap5 de giu chan khg.\n-TOOL Mỹ bảo da check\n- Vùng phủ dam bao.", "tt_dau_vao": "Có IP WAN, không truy cập được", "nguyen_nhan": "Chất lượng kém"}, {"tg": "17/08/2026 09:29:14", "nv": "QTITI.BINHNT8", "acc": "fpt_phuongnam.DienHT", "ghi_chu_cc": "Hàng tháng thu tiền đầy đủ không thiếu 1 đồng, quảng cáo wifi 6 công nghệ mới các kiểu, giờ phải mua thêm 5G dùng, wifi 6 lúc có lúc không. Lên tháo đồ mang về", "ghi_chu": "QTFD01054 - 0334774774 - NGUYỄN ĐĂNG PHÚ KH báo qua hifpt     Lỗi Internet\n ,KB2 k lh KH , nhờ ktv hotro.Chat OB \n QTITI.BINHNT8 17082026 092914 ktv den nha ktra su dung binh thuong. speedtest du goi. ping modem. AP dam bao ko rot goi. \ncac dv game live stream tin hieu tot. tv smart ket noi LAN qua modem chinh dam bao. xem youtube tren tv tren 30 phut on dinh.\nmo hinh nha 2 tang. modem ax3000hi  AP ac1200c LAN  khg rut LAN ket noi tu modem 9 den AP tang 2 ko su dung dc. da gam lai LAN check dv qua AP dam bao.\n\nkhg yeu cau huy. tao sr cbuyen cs cskh them.\n\nQTFD01054 - 0334774774 \n-Số Cls trong 3 tháng gần nhất 1\n- Liên hệ anhchị a Phú, sdt 0334774774\n-Mô hình nhà 2 tang\n-Mô hình thiết bị ax3000hi  AP ac1200c  box 4kfx6\n-Tổng thiết bị SD 7\n- Nguyên nhân lỗi  btri theo yc khg\n-Phương án xử lý gam lai tbi tang 2\n-TOOL Mỹ bảo da check\n- Vùng phủ dam bao.", "tt_dau_vao": "Có IP WAN, không truy cập được", "nguyen_nhan": "Đến nhà khách hàng kiểm tra KH yêu cầu hủy hợp đồng"}, {"tg": "23/08/2026 07:40:40", "nv": "QTITI.BINHNT8", "acc": "HiFPT", "ghi_chu_cc": "Checklist app hifpt  liên hệ số", "ghi_chu": "QTITI.BINHNT8 22082026 163418 1390334774774 lh khg ko nghe may.\n QTITI.BINHNT8 22082026 172540 ktv di chuyen xu ly case khac chua ve truc tiep nha khg dc, lh hd khg tat bat tbi, care hen lai time bao tri khg da ok.1390334774774\n QTITI.BINHNT8 23082026 074039 0334774774 ktv lh khg bao da su dung lai bt roi, tv khg loi khg da tu thao tac. khg bao ktv ko can den nha, dong cl bang 4g", "tt_dau_vao": "KH yêu cầu bảo trì khác", "nguyen_nhan": "Liên hệ Khách hàng báo sử dụng bình thường"}, {"tg": "01/10/2026 14:42:07", "nv": "QTITI.BINHNT8", "acc": "HiFPT", "ghi_chu_cc": "Checklist app hifpt Không có tính hiệu liên hệ số", "ghi_chu": "QTITI.BINHNT8 01102026 143242 lam nha cat cao. lastmile 300m dung rep noi truoc nha", "tt_dau_vao": "Không có tín hiệu quang (mkn)", "nguyen_nhan": "Đứt cáp"}, {"tg": "27/10/2026 16:18:29", "nv": "QTITI.BINHNT8", "acc": "ThuongNTH52", "ghi_chu_cc": "033774 khách hàng báo mạng yếu, hay bị ngắt kết nối, ko ổn định, độ phủ sóng kém, đã thay modem nhưng dk mấy ngày rồi mạng lại yếu, KH có ý định hủy dịch vụ, nhờ KT kiểm tra xử lý dứt điểm cho KH", "ghi_chu": "QTITI.BINHNT8 27102026 155951 -033774 ktv den truc tiep nha khg - Khg bao yeu cau huy cuoi thang lam thu tuc. khg da bao voi tong dai roi. cu ktv den lam gi. xin phap bao tri thi khg noi cu sua di, roi a cung huy. ko chia se tt.\n-ktv ktra vung phu, tbi cong suat tin hieu deu dam bao. khg la nguoi hieu biet cong nghe. tu cau hinh cai fat dc modem. tu dat dc ten song wifi ko can cai dat auto reboot.\n\n-Số Cls trong 3 tháng gần nhất 0\n- Liên hệ anhchị a Phu\n-Mô hình nhà 2 tang\n-Mô hình thiết bị ax3000hi  AP ac1200c  box fx6\n-Tổng thiết bị SD 7\n- Nguyên nhân lỗi  ko xac dinh, yeu cau huy\n-Phương án xử lý chuyen them tt cs cskh them\n-TOOL Mỹ bảo  da check\n- Vùng phủ dam bao", "tt_dau_vao": "WiFi sóng yếu hoặc chập chờn", "nguyen_nhan": "Đến nhà khách hàng kiểm tra KH yêu cầu hủy hợp đồng"}]}, {"stt": 11, "so_hd": "QTD005380", "ten_kh": "Nguyen Thi Huyen", "dia_chi": "148QUANNHAUHOIQUAN Quoc Lo 9, P.1, Phuong Dong Ha, Quang Tri", "ky_thuat": "QTITI.BINHNT8", "quan_ly": "THUONGNTH52", "do_tuoi": "> 24T", "note": "ĐANG XỬ LÍ", "checklists": [{"tg": "25/08/2026 08:45:22", "nv": "QTITI.BINHNT8", "acc": "HuyenNTM6", "ghi_chu_cc": "Mini app -- Nhờ nhân hổ trợ mạng nhà yếu quá ạ", "ghi_chu": "QTD005380 - 0908353249 - Nguyen Thi Huyenkh báo mạng chậm qua hifpt, onurx  21.08 lhe kh not ok, nhờ kt hỗ trợ tại địa chỉ\n\n QTITI.BINHNT8 25082026 084521 Den nha ktra su dung bt. Chi co con nho o nha, do kiem check test box 650 wifi. Camera dtdd cac tbi deu su dung tot. Cs cskh them vs nhe. 0908353249", "tt_dau_vao": "Truy cập mạng chậm hoặc chập chờn", "nguyen_nhan": "Đến nhà khách hàng kiểm tra KH yêu cầu hủy hợp đồng"}]}, {"stt": 12, "so_hd": "QTAAB0238", "ten_kh": "Nguyễn Ngọc Sử", "dia_chi": "(16.8012913, 107.1220080) kiệt 1 Nguyễn Hữu Khiếu, Phường Nam Đông Hà, Quảng Trị", "ky_thuat": "QTITI.HUYND11", "quan_ly": "THUONGNTH52", "do_tuoi": "< 3T", "note": "NOTOK", "checklists": [{"tg": "14/09/2026 14:49:34", "nv": "QTITI.HUYND11", "acc": "ThuongNTH52", "ghi_chu_cc": "Khách hàng báo đầu TH mở ko lên, báo lỗi xoay tròn mãi nói ktra 2, 3 lần r vẫn lỗi, hẹn đầu giờ chiều có nhà, nhờ KT ưu tiên hỗ trợ tránh KH rm", "ghi_chu": "QTITI.HUYND11 14092026 144933 -Số Cls trong 3 tháng gần nhất 1\n- Liên hệ anhchị 0974238777\n- Mô hình   nhà 2 tầng 300hv2  3000cv2\n- Tình trang mạng chập chờn, treo\n- Số lượng tb 8-10\n-Phương án xử lý   kt check md chưa tối ưu cài đặt. Dẫn đến treo. Kt cài đặt tối ưu cấu hình modem. Hiện tại có con trai check dv ok. Khg về sd theo dõi thêm \n- Tool mỹ bảo không phát sinh bất thường", "tt_dau_vao": "Lỗi kết nối BOX và TV (TV không nhận tín hiệu từ Box)", "nguyen_nhan": "Chập chờn, treo (Hoạt động không ổn định)"}]}, {"stt": 13, "so_hd": "QTFD10679", "ten_kh": "LƯƠNG KỀ", "dia_chi": "69 Hà Huy Tập, P.Đông Lương, Phường Nam Đông Hà, Quảng Trị", "ky_thuat": "QTITI.HUNGNH10", "quan_ly": "MOPTH", "do_tuoi": "> 24T", "note": "ĐANG XỬ LÍ", "checklists": [{"tg": "06/04/2026 11:05:27", "nv": "QTITI.HUNGNH10", "acc": "chintl18", "ghi_chu_cc": "-", "ghi_chu": "0988898552 KH báo mất tín hiệu nhờ KT htro\n Chintl18 06042026 074937 0943244081 liên hệ sđt này\n QTITI.HUNGNH10 06042026 110525 - Đến gặp chủ hđ.\n- Lỗi Mất tín hiệu. Đứt cáp thuê bao cách nhà 50m. Kéo lại toàn tuyến chuyển tập điểm  đã xử lý suy hao oke\n- Mô hình sử dụng Modem 1000f T650  AP 1200cv2 tầng 2. \n- Đo kiểm wifi đã do kiểm thực tế vùng phủ đảm bảo. check doctor T thông số oke.\n- Đề xuât, lưu ý thêm Hiện tại không có.", "tt_dau_vao": "Không có tín hiệu quang (mkn)", "nguyen_nhan": "Đứt cáp"}, {"tg": "10/06/2026 19:01:54", "nv": "QTITI.HUNGNH10", "acc": "chintl18", "ghi_chu_cc": "KH báo mạng ở nhà quá yếu, dùng gì cũng xoay, care tắt bật nhưng KH nói ba KH khó tính yếu cầu hỗ trợ tại nhà, KH dùng thêm 1 line trên nguyễn du thì ko bị", "ghi_chu": "QTITI.HUNGNH10 10062026 190152 -Số Cls trong 3 tháng gần nhất q\n- Liên hệ anhchị con gái khg\n-Mô hình nhà 3 tầng\n-Mô hình thiết bị 1000f 1200c tp link t1\n-Tổng thiết bị SD 8\n- Nguyên nhân lỗi  mạng chập chờn\n-Phương án xử lý care sw combo wifi 6 \n-TOOL Mỹ bảo noke\n- Vùng phủ noke", "tt_dau_vao": "WiFi sóng yếu hoặc chập chờn", "nguyen_nhan": "Chập chờn, treo (hoạt động không đúng chức năng ban đầu)"}, {"tg": "04/09/2026 16:18:32", "nv": "QTITI.HUNGNH10", "acc": "ThuongNTH52", "ghi_chu_cc": "khách hàng báo mạng yếu, chập chờn ko dùng dk, cần bt lại", "ghi_chu": "QTITI.HUNGNH10 04092026 083303 đến nhà khg đóng cửa\n QTITI.HUNGNH10 04092026 154701 -Số Cls trong 3 tháng gần nhất 0\n- Liên hệ anhchịchủ hđ\n-Mô hình nhà 3 tầng\n-Mô hình thiết bị 3000hv2 3000cv2 1200c ap tự trang bị t650 box\n-Tổng thiết bị SD 14\n- Nguyên nhân lỗi  mạng chập chờn ko dùng được\n-Phương án xử lý kiểm tra lỗi lúp lan gỡ lan lỗi.nhổ repekter.check đv bt care khg theo dõi\n-TOOL Mỹ bảo ok\n- Vùng phủ ok", "tt_dau_vao": "Chương trình KH thân thiết", "nguyen_nhan": "Nhu cầu KH"}]}, {"stt": 14, "so_hd": "QTAAA1973", "ten_kh": "ĐOÀN THANH CHIẾN", "dia_chi": "Phía sau sau lung nha 12 Võ Nguyên Giáp, Xã Gio Linh, Quảng Trị", "ky_thuat": "QTITI.HOANQ", "quan_ly": "MOPTH", "do_tuoi": "> 24T", "note": "ĐANG XỬ LÍ", "checklists": []}];
+        const rawData = [{"stt": 1, "so_hd": "QTAAA3868", "ten_kh": "CAO THẮNG LỢI", "dia_chi": "35, Phan Bội Châu, Xã Gio Linh, Quảng Trị", "ky_thuat": "QTITI.HOANQ", "quan_ly": "MOPTH", "do_tuoi": "> 24T", "note": "NOTOK", "noi_dung_xl": "NKN báo mạng yếu bắt mạng khác rồi, mạng dùng khi đc khi ko, hiện tại trong nhà đã chuyển VNPT, cus và KT care cước T10 khách hàng chưa thanh toán", "checklists": []}, {"stt": 2, "so_hd": "QTAAA6512", "ten_kh": "Nguyen Thi Hong Minh", "dia_chi": "19 Nguyễn Đức Thuận, Phường Nam Đông Hà, Quảng Trị", "ky_thuat": "QTITI.HUNGNH10", "quan_ly": "MOPTH", "do_tuoi": "> 12T", "note": "NOTOK", "noi_dung_xl": "0915014307 - KH nói mạng yếu ko dùng đc nên cắt rồi, thợ tới cũng rút ra cắm lại thôi, ko xử lý gì mạng ko cải thiện nên đã chuyển mạng khác, tp notok", "checklists": [{"tg": "29/04/2026 17:17:31", "nv": "QTITI.HUNGNH10", "acc": "mopth", "ghi_chu_cc": "có hình k có tiếng, cs hdan notok nhờ kt htro", "ghi_chu": "QTITI.HUNGNH10 29042026 171730 lỗi loa tv care khg đi sửa tv khg đa ok.", "tt_dau_vao": "KH yêu cầu bảo trì khác", "nguyen_nhan": "Phục vụ nhu cầu phát sinh"}, {"tg": "24/09/2026 11:56:42", "nv": "QTITI.HUNGNH10", "acc": "mopth", "ghi_chu_cc": "KH báo mạng 3 hôm nay dùng như ko, cả wifi và truyền hình tivi chi cũng xem lag, kh ko chịu tắt bật báo k sửa thì cắt", "ghi_chu": "QTITI.HUNGNH10 24092026 115640 -Số Cls trong 3 tháng gần nhất 0\n- Liên hệ anhchị đến nhà gặp chủ hđ\n-Mô hình nhà 2 tầng\n-Mô hình thiết bị 3000hv2 t650 ap t2 ap củ chị trang đưa\n-Tổng thiết bị SD7\n- Nguyên nhân lỗi  moden hoạt động 36day ko reboot.phản ánh mạng yếu.vị trí moden phòng khách sau tv.\n-Phương án xử lý reboot moden.treo moden ra khỏi tv\n-TOOL Mỹ bảo ok\n- Vùng phủ noke.", "tt_dau_vao": "Không có tín hiệu quang (mkn)", "nguyen_nhan": "Chập chờn, treo (hoạt động không đúng chức năng ban đầu)"}]}, {"stt": 3, "so_hd": "QTAAA6038", "ten_kh": "Hoàng Minh Thuận", "dia_chi": "kiệt 48/20 Nguyễn Du, Phường Đông Hà, Quảng Trị", "ky_thuat": "QTITI.HUNGNH10", "quan_ly": "MOPTH", "do_tuoi": "> 12T", "note": "NOTOK", "noi_dung_xl": "KT đến nhà KH bắt Viettel, cs liên hệ KH báo họ làm việc trên web nhiều nhưng wifi quá yếu ko load đc, bảo trì nhiều lần cũng k cải thiện, KH này hầu như tháng nào cũng có clbt luôn á, KT ở nhà kh tp notok", "checklists": [{"tg": "22/04/2026 16:35:18", "nv": "QTITI.HOANQ", "acc": "fpt_phuongnam.KienCT", "ghi_chu_cc": "QTAAA6038 - Hoàng Minh Thuận kh báo khong dùng được internet kiểm tra có ipwan suy hao -17.5 hổ trợ kh rb lại tb đổi kênh sóng not ok nhờ kt kiểm tra giúp", "ghi_chu": "QTITI.HOANQ 22042026 163517 lỗi RJ45 kết nối AP. đã xly", "tt_dau_vao": "KH yêu cầu bảo trì khác", "nguyen_nhan": "Phục vụ nhu cầu phát sinh"}, {"tg": "24/08/2026 12:03:17", "nv": "QTITI.HUNGNH10", "acc": "TienDM", "ghi_chu_cc": "Mini app -- Mạng quá yếu, ko làm việc được", "ghi_chu": "QTAAA6038 - 0918498222 - Hoàng Minh Thuận  Mạng quá yếu, ko làm việc được. Kỹ thuật kiểm tả giúp.  \n QTITI.HUNGNH10 23082026 105105 Liên hệ khg hẹn chiều xl\n QTITI.HUNGNH10 24082026 120300 -Số Cls trong 3 tháng gần nhất 0\n- Liên hệ anhchị chủ hđ\n-Mô hình nhà 2 tầng\n-Mô hình thiết bị 3000hv2 3000cv2 t650 cmr\n-Tổng thiết bị SD 7\n- Nguyên nhân lỗi  tầng 2 ko dùng đc mạng\n-Phương án xử lý bấm lại đầu j45 kết nối lại mô hình mesh.lan đạt 1G\n-TOOL Mỹ bảo ok\n- Vùng phủ ok", "tt_dau_vao": "Truy cập mạng chậm hoặc chập chờn", "nguyen_nhan": "Hỏng RJ45"}, {"tg": "10/10/2026 17:25:01", "nv": "QTITI.HUNGNH10", "acc": "fpt_phuongnam.NhuDH", "ghi_chu_cc": "Mini app --", "ghi_chu": "Mini app -- kh báo chậm chập chờn, tđv ktra có ipw, đã gửi ob, nhờ kt hỗ trợ giúp. \n QTITI.HUNGNH10 10102026 172500 -Số Cls trong 3 tháng gần nhất 0\n- Liên hệ anhchị đến nhà gặp con gái\n-Mô hình nhà 2 tầng\n-Mô hình thiết bị 3000hv2 3000cv2 t650\n-Tổng thiết bị SD 7\n- Nguyên nhân lỗi  khg báo mạng yếu không dùng được muốn hủy\n-Phương án xử lý KT kiểm tra cấu hình lại áp Tầng 2 care khg SD theo dõi thêm.báo lại còn gái báo lại cho mẹ\n-TOOL Mỹ bảo Ok", "tt_dau_vao": "Lỗi kết nối BOX và TV (TV không nhận tín hiệu từ Box)", "nguyen_nhan": "TV tắt"}, {"tg": "28/10/2026 09:04:28", "nv": "QTITI.HUNGNH10", "acc": "fpt_phuongnam.ThuyNT12", "ghi_chu_cc": "Yêu cầu app hifpt  liên hệ số 091222", "ghi_chu": "Yêu cầu app hifpt  liên hệ số 091222 kbm, kh báo hi fpt lỗi internet , nhờ kt htr giúp , onu -20.46 \n QTITI.HUNGNH10 27102026 182718 khách hàng hẹn mai qua nhà kiểm tra lần nữa không được thì nhổ mạng giúp chị\n QTITI.HUNGNH10 28102026 090423 KT đến nhà bảo trì..khg đả lắp sang Viettel.\nHỏi lý do khg báo chị làm việc trên web thuedientu không được nên chuyển sang Viettel em à thông cảm giùm chị.", "tt_dau_vao": "Truy cập mạng chậm hoặc chập chờn", "nguyen_nhan": "Đến nhà khách hàng kiểm tra KH yêu cầu hủy hợp đồng"}]}, {"stt": 4, "so_hd": "QTAAA7654", "ten_kh": "Trần Tữu", "dia_chi": "(16.7027918, 107.2638160) Lê Quý Đôn, Xã Diên Sanh, Quảng Trị", "ky_thuat": "QTITI.THUONGLC", "quan_ly": "NAHTL5", "do_tuoi": "> 6T", "note": "NOTOK", "noi_dung_xl": "0987527774 KH gọi lên tđ báo cắt mạng vì k có nhu cầu sử dụng, cus liên hệ KH báo mạng trong quá trình dùng cứ bị gặp sự cố mãi, box giọng nói khi được khi ko, KH thấy bâts tiện nên hni đã gọi mạng khác tới lắp, tp KH cho KT ghé bảo trì vì trong quá trinh dùng k thấy bảo trì lần nào nhưng KH k chịu, nhâts quyết cắt. KT đến nhà khg đả lắp vnpt. thuyết phục thêm xu lí cho khg not ok. nhất quyết cắt.", "checklists": [{"tg": "09/10/2026 08:26:36", "nv": "QTITI.THUONGLC", "acc": "System-SR", "ghi_chu_cc": "-", "ghi_chu": "QTITI.THUONGLC 09102026 082452 0987527774. kt liên hệ khg báo hủy hd. thiết bị đả rút ra không dùng nửa. kt tạo cskh nho cs nắm thêm thoongntin care thêm khg.", "tt_dau_vao": "Có IP WAN, không truy cập được", "nguyen_nhan": "Liên hệ khách hàng yêu cầu hủy hợp đồng"}, {"tg": "13/10/2026 05:41:40", "nv": "QTITI.THUONGLC", "acc": "nahtl5", "ghi_chu_cc": "KH gọi lên tđ báo cắt mạng vì k có nhu cầu sử dụng, cus liên hệ KH báo mạng trong quá trình dùng cứ bị gặp sự cố mãi, box giọng nói khi được khi ko, KH thấy bâts tiện nên hni đã gọi mạng khác tới lắp, tp KH cho KT ghé bảo trì vì trong quá trinh dùng k thấy bảo trì lần nào nhưng KH k chịu, nhâts quyết cắt. Ca này e đang thấy có list tđ, a ghé nhà xem sao nhé", "ghi_chu": "QTITI.THUONGLC 12102026 182451 0987527774. kt đến nhà khg đả lắp vnpt. thuyết phục thêm xu lí cho khg not ok. nhất quyết cắt. khg chưa có checklissh xu lí trước đó. tạo cskh nắm thêm thông tin", "tt_dau_vao": "KH không cung cấp rõ tình trạng lỗi hoặc KH có khiếu nại RM", "nguyen_nhan": "Đến nhà khách hàng kiểm tra KH yêu cầu hủy hợp đồng"}]}, {"stt": 5, "so_hd": "QTAAA6005", "ten_kh": "NGUYỄN THỊ THÙY SÂM", "dia_chi": "12/19 Trần Quý Cáp, Phường Nam Đông Hà, Tỉnh Quảng Trị", "ky_thuat": "QTITI.NHATLV1", "quan_ly": "NAHTL5", "do_tuoi": "> 12T", "note": "NOTOK", "noi_dung_xl": "0917515545 KH tới hạn recare báo hủy vì CLDT, trong quá trình KH dùng từ khi lắp KH đã báo hết gói là cắt vì mạng yếu, phía cty đã trang bị thêm 1AP hỗ trợ nữa tổng là 2 AP, 1 modem chính nhưng KH báo mạng ở phòng ngủ vẫn k đảm bảo, dùng vẫn cứ xoay. Ca này cus cùng điều hành đã ghé trực tiếp tại nhà test cùng KH nhưng KH vẫn k hài lòng, nay tới hạn KH báo đã chuyển qua mạng VNPT sử dụng rồi, tp notok", "checklists": [{"tg": "27/08/2026 18:43:18", "nv": "QTITI.HUYND11", "acc": "ThuongNTH52", "ghi_chu_cc": "khách hàng báo mạng ko xem truyen hinh dlk xoay tron", "ghi_chu": "QTITI.HUYND11 27082026 184317 0974171111 khg không nghe số lạ. qua nhà khg báo đã sd bth. kiểm tra tổng quát không phát sinh bất thường. kt đóng checklist nhờ khg theo dõi thêm", "tt_dau_vao": "Truyền hình không xem được một vài kênh", "nguyen_nhan": "Chập chờn, treo (Hoạt động không ổn định)"}, {"tg": "06/10/2026 17:50:11", "nv": "QTITI.NHATLV1", "acc": "nahtl5", "ghi_chu_cc": "Kh báo mạng quá yếu, kh có ý định dùng hết tháng huỷ chứ báo trì quá nhiều lần rồi mà vẫn k khắc phục được. Trong nhà toàn dùng thiết bị thông minh như robot, cửa tự động mà k kết nối được wifi nhừo Kt ghé xử lý dứt điểm", "ghi_chu": "QTITI.NHATLV1 06102026 151943 hẹn lại khg\n QTITI.NHATLV1 06102026 174906 khg báo ych nhiều lần. từ lúc lắp đặt. đã hỗ trợ khg check dvu bt nhưng khg báo yếu. khg k dy btri tạo cskh nhờ cs hỗ trơn thêm", "tt_dau_vao": "Có IP WAN, không truy cập được", "nguyen_nhan": "Liên hệ khách hàng yêu cầu hủy hợp đồng"}]}, {"stt": 6, "so_hd": "QTAAA7872", "ten_kh": "Nguyễn Duy Phong", "dia_chi": "Tạp Hoá Thông Gái Thôn Quy Thiện, Xã Vĩnh Định, Quảng Trị", "ky_thuat": "QTITI.TRUONGTN1", "quan_ly": "NAHTL5", "do_tuoi": "> 6T", "note": "NOTOK", "noi_dung_xl": "0375319092 KH nkn, cus liên hệ ban đầu KH cứ báo k có nhu cầu dùng nữa nên cắt, cus care HĐ mới chưa cắt được thì KH báo mạng dùng cứ có vấn đề mãi, chập chờn liên tục nên KH đã chuyển qua VNPT, cus check list bảo trì gần nhất là 18/10, KT mới xử lý 1 tuần trước mà giờ KH đã chuyển qua mạng khác, tp KH cho KT ghé lại kiểm tra nhưng notok, nhất quyết cắt", "checklists": [{"tg": "18/10/2026 12:06:38", "nv": "QTITI.TRUONGTN1", "acc": "ChauHB2", "ghi_chu_cc": "KH tạo YCHT trên app HiFPT", "ghi_chu": "QTAAA7872 - Nguyễn Duy Phong 0375319092, KH tạo YCHT trên app HiFPT Lỗi Truyền hình, hiện tai ktra EnableOfflineLOSi ko ip chuyen KT nam tt den nha ktra giup kh \n \n QTITI.TRUONGTN1 18102026 095409 kt xl k kịp có care kh chiều xl, nh oke\n QTITI.TRUONGTN1 18102026 120636 -Số Cls trong 3 tháng gần nhất \n-Liên hệ anhchị         SDT\n-Mô hình nhà 1 tần\n-Mô hình thiết bị hv2 box 650\n-Tổng thiết bị SD.5\n-Nguyên nhân lỗi  kh cắt nhầm dây cap  remote lỗi nói k được\n-Phương án xử lý nối lại cap cho kh,  bảo hành remote\n-TOOL Mỹ bảo  oke\n-Vùng phủ oke", "tt_dau_vao": "Lỗi không sử dụng được tính năng điều khiển giọng nói", "nguyen_nhan": "Hư míc"}]}, {"stt": 7, "so_hd": "QTFD00619", "ten_kh": "Nguyen Thi Tam", "dia_chi": "4 Nguyen Trai, Xa Khe Sanh, Quang Tri", "ky_thuat": "QTITI.NINHNV1", "quan_ly": "NAHTL5", "do_tuoi": "> 24T", "note": "NOTOK", "noi_dung_xl": "0982664745 KH nkn, cus liên hệ con KH dùng mạng báo yếu quá nên chuyển qua VIettel rồi, lâu ni có Ninh hay thu tiền, mỗi lần mạng yếu cũng hay gọi A Ninh tới sửa đó nhưng mạng cứ chập chờn mãi, con trong nhà k dùng được nên đã gọi VIettel lắp rồi, care cho KT ghé xem lại nhưng notok. Ca này htrc KT Kiệt nhận phiếu bảo trì có ghé nhưng tp nối lại notok", "checklists": [{"tg": "31/10/2026 18:46:31", "nv": "QTITI.KIETNA", "acc": "nahtl5", "ghi_chu_cc": "KH báo mạng k sd được, nhờ KT ghé hỗ trợ", "ghi_chu": "QTITI.KIETNA 31102026 170423 đến nhà khg. khg báo hủy hđ r", "tt_dau_vao": "Không có tín hiệu quang (mkn)", "nguyen_nhan": "Liên hệ Khách hàng báo sử dụng bình thường"}]}, {"stt": 8, "so_hd": "QTAAA6070", "ten_kh": "Nguyễn Duy Hải", "dia_chi": "kiệt 229/5 Lê Duẩn, Phường Nam Đông Hà, Quảng Trị", "ky_thuat": "QTITI.NHATLV1", "quan_ly": "NAHTL5", "do_tuoi": "> 12T", "note": "NOTOK", "noi_dung_xl": "0943200345 KH nkn, cs liên hệ KH báo đã chuyển qua lại mạng Viettel sử dụng vì thấy dùng mạng FPT yếu, cus tp KH cho KT ghé lại kiểm tra đường truyền, vì list gần nhất bảo trì là t12 năm ngoái nhưng KH notok, nhất quyết hủy, k trao đổi thêm. cs ghé nhà chỉ gặp ba KH, ba Kh báo cái này dùng trong nhà con cái quyết định chứ chú ko biết, hiện tại lắp viettel dùng thấy ổn định, tp nối laii dv notok", "checklists": []}, {"stt": 9, "so_hd": "QTAAA3099", "ten_kh": "NGUYỄN QUANG TRUNG", "dia_chi": "K13 Đặng Thái Thân, Phường Nam Đông Hà, Quảng Trị", "ky_thuat": "QTITI.BINHNT8", "quan_ly": "THUONGNTH52", "do_tuoi": "> 24T", "note": "NOTOK", "noi_dung_xl": "905123919 Khách hàng lên quầy báo cắt mạng ko sử dụng nữa, hỏi lý do vì KT bào trì tới bảo trì trễ hẹn, đến khi KH đi vắng thì mới tới nên ko làm dk, KH ko hài lòng, thuyết phục tại quầy nhưng KH nhất quyết ko chịu, KT tới nhà KH ko đồng ý bảo trì nữa, tháo tbi đưa trả, thuyết phục not ok", "checklists": [{"tg": "30/04/2026 09:55:12", "nv": "QTITI.SIEUTM", "acc": "ThuongNTH52", "ghi_chu_cc": "khách hàng báo ko sử dụng được đièu khiển giọng nói, mới mua điều khiển mới đây giờ lại ko dùng được", "ghi_chu": "QTITI.SIEUTM 30042026 095511 Gặp vợ khg 0905123919. Kt kiểm tra và ghép nối remote và voice sử dụng ok. Kiểm tra ok cùng khg", "tt_dau_vao": "Lỗi không sử dụng được tính năng điều khiển giọng nói", "nguyen_nhan": "Chưa ghép nối"}, {"tg": "11/07/2026 14:15:12", "nv": "QTITI.BINHNT8", "acc": "mopth", "ghi_chu_cc": "KH báo mạng quá yếu, gọi zalo cho con mà đứng hình k xem đc, tivi xem bóng đứng hình, nhờ KT thay thiết bị lại xem chứ chú ni ko cải thiện là chú hủy", "ghi_chu": "QTITI.BINHNT8 11072026 095103 1390905123919 lh ko nghe may.\n QTITI.BINHNT8 11072026 141215 0905123919 ktv lh nhíu lan ko nghe may. den nha khoa cua. chuyen tt cs ho tro cskh them.", "tt_dau_vao": "Wifi sóng tốt - kết nối được nhưng truy cập chậm hoặc chập chờn", "nguyen_nhan": "Liên hệ khách hàng yêu cầu hủy hợp đồng"}, {"tg": "05/08/2026 11:08:17", "nv": "QTITI.BINHNT8", "acc": "mopth", "ghi_chu_cc": "box lỗi nhờ KT thay box tsd", "ghi_chu": "QTITI.BINHNT8 05082026 110255 checklist lap 2. loi box 650 ko lien khet dc dieu khien. thay the box bao hanh. 0905123919 chu Trung.\n QTITI.BINHNT8 05082026 110739 -Số Cls trong 3 tháng gần nhất 2\n- Liên hệ anhchị0905123919 chu Trung\n-Mô hình nhà 2 tang\n-Mô hình thiết bị ac1000hi  ac1200c  box 650 LAN\n-Tổng thiết bị SD 7\n- Nguyên nhân lỗi  box650 loi\n-Phương án xử lý thay the\n-TOOL Mỹ bảo da check\n- Vùng phủ dam bao", "tt_dau_vao": " Truyền hình mất hình/ mất tiếng một vài kênh", "nguyen_nhan": "Chập chờn, treo (Hoạt động không ổn định)"}, {"tg": "27/10/2026 16:28:51", "nv": "QTITI.BINHNT8", "acc": "DaisyNextgen", "ghi_chu_cc": "QTAAA3099 - 090919 - Kênh tiếp nhận live-chat - Sender ID 6adf246ff3db5 - SĐT KH cung cấp 090919 - Báo hỏng dịch vụ", "ghi_chu": "QTAAA3099 - 090919 - 6adf246ff3db5 - Khách hàng đã yêu cầu di chuyển vị trí modem trong nhà để cải thiện tốc độ kết nối internet. Khách hàng chưa thực hiện Autofix và cần hỗ trợ trực tiếp. Cần KTV hỗ trợ tại nhà.\n QTITI.BINHNT8 27102026 114721 ktv xu ly khu vuc Cam lo xa pop chua den dc nha khg.\n QTITI.BINHNT8 27102026 162851 ktv lh khg bao di Vinh linh roi, luc mo.ve chu goi. tam.thoi dang dung bt. dong cl bang 4g ko vao nha khg.", "tt_dau_vao": "Không truy cập được một số dịch vụ hoặc website", "nguyen_nhan": "Liên hệ Khách hàng báo sử dụng bình thường"}]}, {"stt": 10, "so_hd": "QTFD01054", "ten_kh": "NGUYỄN ĐĂNG PHÚ", "dia_chi": "Kiệt 265 Bà Triệu (Nhà cuối cùng bên tay trái ), Phường Đông Hà, Quảng Trị", "ky_thuat": "QTITI.BINHNT8", "quan_ly": "THUONGNTH52", "do_tuoi": "> 24T", "note": "NOTOK", "noi_dung_xl": "0334774774 KH báo hủy dịch vụ vì Mạng bên em hay bị ngắt, không ổn định, độ phủ sóng kém. ktv den truc tiep nha khg - Khg bao yeu cau huy cuoi thang lam thu tuc. khg da bao voi tong dai roi. cu ktv den lam gi. xin phap bao tri thi khg noi cu sua di, roi a cung huy. ko chia se tt.cs gọi qua đt KH báo nhất quyết hủy, bữa giờ ba mẹ ở nhà dùng yếu ko nói giờ KH về dùng Kh thấy yếu, tư vấn kH thay thế modem mới KH ko đồng ý, KH nói do ở đường truyền, ko đồng ý sd lại, hết thnags 10 hủy", "checklists": [{"tg": "01/06/2026 11:08:35", "nv": "QTITI.BINHNT8", "acc": "KhachHang", "ghi_chu_cc": "Mạng yếu", "ghi_chu": "QTFD01054 - 0334774774 - NGUYỄN ĐĂNG PHÚ KH báo qua hifpt   Lỗi Internet\n,KB2 k lh KH , nhờ ktv hotro.Chat OB\n QTITI.BINHNT8 01062026 110834 -Số Cls trong 3 tháng gần nhất 3\n- Liên hệ anhchị a Phú, sdt 0334774774\n-Mô hình nhà 2 tang\n-Mô hình thiết bị ax3000hi  AP ac1200c  box 4kfx6\n-Tổng thiết bị SD 7\n- Nguyên nhân lỗi  cap5 ket noi modem den AP loi. hong, mat ket noi den AP, tang 2 truy cap wifi ko đc\n-Phương án xử lý check loi cap5 bi chut can nhieu doan, care khg thay the cap 5 theo cs gia cong ty 11k1 phat sinh khoang 8- 10m. khg ko dong y chi phi phat sinh, tao srmobile cbuyen tt cs cskh them ve thu tuc ích vu phi ohat sinh. ktv da thay cap5 de giu chan khg.\n-TOOL Mỹ bảo da check\n- Vùng phủ dam bao.", "tt_dau_vao": "Có IP WAN, không truy cập được", "nguyen_nhan": "Chất lượng kém"}, {"tg": "17/08/2026 09:29:14", "nv": "QTITI.BINHNT8", "acc": "fpt_phuongnam.DienHT", "ghi_chu_cc": "Hàng tháng thu tiền đầy đủ không thiếu 1 đồng, quảng cáo wifi 6 công nghệ mới các kiểu, giờ phải mua thêm 5G dùng, wifi 6 lúc có lúc không. Lên tháo đồ mang về", "ghi_chu": "QTFD01054 - 0334774774 - NGUYỄN ĐĂNG PHÚ KH báo qua hifpt     Lỗi Internet\n ,KB2 k lh KH , nhờ ktv hotro.Chat OB \n QTITI.BINHNT8 17082026 092914 ktv den nha ktra su dung binh thuong. speedtest du goi. ping modem. AP dam bao ko rot goi. \ncac dv game live stream tin hieu tot. tv smart ket noi LAN qua modem chinh dam bao. xem youtube tren tv tren 30 phut on dinh.\nmo hinh nha 2 tang. modem ax3000hi  AP ac1200c LAN  khg rut LAN ket noi tu modem 9 den AP tang 2 ko su dung dc. da gam lai LAN check dv qua AP dam bao.\n\nkhg yeu cau huy. tao sr cbuyen cs cskh them.\n\nQTFD01054 - 0334774774 \n-Số Cls trong 3 tháng gần nhất 1\n- Liên hệ anhchị a Phú, sdt 0334774774\n-Mô hình nhà 2 tang\n-Mô hình thiết bị ax3000hi  AP ac1200c  box 4kfx6\n-Tổng thiết bị SD 7\n- Nguyên nhân lỗi  btri theo yc khg\n-Phương án xử lý gam lai tbi tang 2\n-TOOL Mỹ bảo da check\n- Vùng phủ dam bao.", "tt_dau_vao": "Có IP WAN, không truy cập được", "nguyen_nhan": "Đến nhà khách hàng kiểm tra KH yêu cầu hủy hợp đồng"}, {"tg": "23/08/2026 07:40:40", "nv": "QTITI.BINHNT8", "acc": "HiFPT", "ghi_chu_cc": "Checklist app hifpt  liên hệ số", "ghi_chu": "QTITI.BINHNT8 22082026 163418 1390334774774 lh khg ko nghe may.\n QTITI.BINHNT8 22082026 172540 ktv di chuyen xu ly case khac chua ve truc tiep nha khg dc, lh hd khg tat bat tbi, care hen lai time bao tri khg da ok.1390334774774\n QTITI.BINHNT8 23082026 074039 0334774774 ktv lh khg bao da su dung lai bt roi, tv khg loi khg da tu thao tac. khg bao ktv ko can den nha, dong cl bang 4g", "tt_dau_vao": "KH yêu cầu bảo trì khác", "nguyen_nhan": "Liên hệ Khách hàng báo sử dụng bình thường"}, {"tg": "01/10/2026 14:42:07", "nv": "QTITI.BINHNT8", "acc": "HiFPT", "ghi_chu_cc": "Checklist app hifpt Không có tính hiệu liên hệ số", "ghi_chu": "QTITI.BINHNT8 01102026 143242 lam nha cat cao. lastmile 300m dung rep noi truoc nha", "tt_dau_vao": "Không có tín hiệu quang (mkn)", "nguyen_nhan": "Đứt cáp"}, {"tg": "27/10/2026 16:18:29", "nv": "QTITI.BINHNT8", "acc": "ThuongNTH52", "ghi_chu_cc": "033774 khách hàng báo mạng yếu, hay bị ngắt kết nối, ko ổn định, độ phủ sóng kém, đã thay modem nhưng dk mấy ngày rồi mạng lại yếu, KH có ý định hủy dịch vụ, nhờ KT kiểm tra xử lý dứt điểm cho KH", "ghi_chu": "QTITI.BINHNT8 27102026 155951 -033774 ktv den truc tiep nha khg - Khg bao yeu cau huy cuoi thang lam thu tuc. khg da bao voi tong dai roi. cu ktv den lam gi. xin phap bao tri thi khg noi cu sua di, roi a cung huy. ko chia se tt.\n-ktv ktra vung phu, tbi cong suat tin hieu deu dam bao. khg la nguoi hieu biet cong nghe. tu cau hinh cai fat dc modem. tu dat dc ten song wifi ko can cai dat auto reboot.\n\n-Số Cls trong 3 tháng gần nhất 0\n- Liên hệ anhchị a Phu\n-Mô hình nhà 2 tang\n-Mô hình thiết bị ax3000hi  AP ac1200c  box fx6\n-Tổng thiết bị SD 7\n- Nguyên nhân lỗi  ko xac dinh, yeu cau huy\n-Phương án xử lý chuyen them tt cs cskh them\n-TOOL Mỹ bảo  da check\n- Vùng phủ dam bao", "tt_dau_vao": "WiFi sóng yếu hoặc chập chờn", "nguyen_nhan": "Đến nhà khách hàng kiểm tra KH yêu cầu hủy hợp đồng"}]}, {"stt": 11, "so_hd": "QTD005380", "ten_kh": "Nguyen Thi Huyen", "dia_chi": "148QUANNHAUHOIQUAN Quoc Lo 9, P.1, Phuong Dong Ha, Quang Tri", "ky_thuat": "QTITI.BINHNT8", "quan_ly": "THUONGNTH52", "do_tuoi": "> 24T", "note": "ĐANG XỬ LÍ", "noi_dung_xl": "908353249 KH báo mạng yếu đòi cắt mạng, liên hệ hẹn bào trì wifi thì kH lại nói mạng khác rẻ hơn gói 152k tháng thôi, tư vấn KH gói cước combo đang ưu đãi , kh so sánh cước nhà mạng khác. hẹn KT bảo trì ghé nhà KH nhưng chưa gặp dk, hẹn lại sau 5h chiều mới có nhà.", "checklists": [{"tg": "25/08/2026 08:45:22", "nv": "QTITI.BINHNT8", "acc": "HuyenNTM6", "ghi_chu_cc": "Mini app -- Nhờ nhân hổ trợ mạng nhà yếu quá ạ", "ghi_chu": "QTD005380 - 0908353249 - Nguyen Thi Huyenkh báo mạng chậm qua hifpt, onurx  21.08 lhe kh not ok, nhờ kt hỗ trợ tại địa chỉ\n\n QTITI.BINHNT8 25082026 084521 Den nha ktra su dung bt. Chi co con nho o nha, do kiem check test box 650 wifi. Camera dtdd cac tbi deu su dung tot. Cs cskh them vs nhe. 0908353249", "tt_dau_vao": "Truy cập mạng chậm hoặc chập chờn", "nguyen_nhan": "Đến nhà khách hàng kiểm tra KH yêu cầu hủy hợp đồng"}]}, {"stt": 12, "so_hd": "QTAAB0238", "ten_kh": "Nguyễn Ngọc Sử", "dia_chi": "(16.8012913, 107.1220080) kiệt 1 Nguyễn Hữu Khiếu, Phường Nam Đông Hà, Quảng Trị", "ky_thuat": "QTITI.HUYND11", "quan_ly": "THUONGNTH52", "do_tuoi": "< 3T", "note": "NOTOK", "noi_dung_xl": "qtaab0238 kh báo box xem ko ổn định, đơ giật lag - qtaab0238 - Nguyễn Ngọc Sử - (16.8012913, 107.1220080) kiệt 1 Nguyễn Hữu Khiếu, Phường Nam Đông Hà, Quảng Trị: sáng nay cs gọi care la· KH rồi nhưng kh báo cuối tháng huỷ, quay lại viettel, care notok, KT và cs đã ghé nhà, kh đã lăp VT, nóigì cũng ko chịu", "checklists": [{"tg": "14/09/2026 14:49:34", "nv": "QTITI.HUYND11", "acc": "ThuongNTH52", "ghi_chu_cc": "Khách hàng báo đầu TH mở ko lên, báo lỗi xoay tròn mãi nói ktra 2, 3 lần r vẫn lỗi, hẹn đầu giờ chiều có nhà, nhờ KT ưu tiên hỗ trợ tránh KH rm", "ghi_chu": "QTITI.HUYND11 14092026 144933 -Số Cls trong 3 tháng gần nhất 1\n- Liên hệ anhchị 0974238777\n- Mô hình   nhà 2 tầng 300hv2  3000cv2\n- Tình trang mạng chập chờn, treo\n- Số lượng tb 8-10\n-Phương án xử lý   kt check md chưa tối ưu cài đặt. Dẫn đến treo. Kt cài đặt tối ưu cấu hình modem. Hiện tại có con trai check dv ok. Khg về sd theo dõi thêm \n- Tool mỹ bảo không phát sinh bất thường", "tt_dau_vao": "Lỗi kết nối BOX và TV (TV không nhận tín hiệu từ Box)", "nguyen_nhan": "Chập chờn, treo (Hoạt động không ổn định)"}]}, {"stt": 13, "so_hd": "QTFD10679", "ten_kh": "LƯƠNG KỀ", "dia_chi": "69 Hà Huy Tập, P.Đông Lương, Phường Nam Đông Hà, Quảng Trị", "ky_thuat": "QTITI.HUNGNH10", "quan_ly": "MOPTH", "do_tuoi": "> 24T", "note": "ĐANG XỬ LÍ", "noi_dung_xl": "0934827094 KH nkn, cs liên hệ KH báo cắt mạng vì mạng quá yếu nên chiều qua KH đã nt cho c Ba báo cắt mạng và bắt mạng khác rồi, tp KH cho KT ghé bảo trì nhưng notok, e gửi tt rm tuyến a", "checklists": [{"tg": "06/04/2026 11:05:27", "nv": "QTITI.HUNGNH10", "acc": "chintl18", "ghi_chu_cc": "-", "ghi_chu": "0988898552 KH báo mất tín hiệu nhờ KT htro\n Chintl18 06042026 074937 0943244081 liên hệ sđt này\n QTITI.HUNGNH10 06042026 110525 - Đến gặp chủ hđ.\n- Lỗi Mất tín hiệu. Đứt cáp thuê bao cách nhà 50m. Kéo lại toàn tuyến chuyển tập điểm  đã xử lý suy hao oke\n- Mô hình sử dụng Modem 1000f T650  AP 1200cv2 tầng 2. \n- Đo kiểm wifi đã do kiểm thực tế vùng phủ đảm bảo. check doctor T thông số oke.\n- Đề xuât, lưu ý thêm Hiện tại không có.", "tt_dau_vao": "Không có tín hiệu quang (mkn)", "nguyen_nhan": "Đứt cáp"}, {"tg": "10/06/2026 19:01:54", "nv": "QTITI.HUNGNH10", "acc": "chintl18", "ghi_chu_cc": "KH báo mạng ở nhà quá yếu, dùng gì cũng xoay, care tắt bật nhưng KH nói ba KH khó tính yếu cầu hỗ trợ tại nhà, KH dùng thêm 1 line trên nguyễn du thì ko bị", "ghi_chu": "QTITI.HUNGNH10 10062026 190152 -Số Cls trong 3 tháng gần nhất q\n- Liên hệ anhchị con gái khg\n-Mô hình nhà 3 tầng\n-Mô hình thiết bị 1000f 1200c tp link t1\n-Tổng thiết bị SD 8\n- Nguyên nhân lỗi  mạng chập chờn\n-Phương án xử lý care sw combo wifi 6 \n-TOOL Mỹ bảo noke\n- Vùng phủ noke", "tt_dau_vao": "WiFi sóng yếu hoặc chập chờn", "nguyen_nhan": "Chập chờn, treo (hoạt động không đúng chức năng ban đầu)"}, {"tg": "04/09/2026 16:18:32", "nv": "QTITI.HUNGNH10", "acc": "ThuongNTH52", "ghi_chu_cc": "khách hàng báo mạng yếu, chập chờn ko dùng dk, cần bt lại", "ghi_chu": "QTITI.HUNGNH10 04092026 083303 đến nhà khg đóng cửa\n QTITI.HUNGNH10 04092026 154701 -Số Cls trong 3 tháng gần nhất 0\n- Liên hệ anhchịchủ hđ\n-Mô hình nhà 3 tầng\n-Mô hình thiết bị 3000hv2 3000cv2 1200c ap tự trang bị t650 box\n-Tổng thiết bị SD 14\n- Nguyên nhân lỗi  mạng chập chờn ko dùng được\n-Phương án xử lý kiểm tra lỗi lúp lan gỡ lan lỗi.nhổ repekter.check đv bt care khg theo dõi\n-TOOL Mỹ bảo ok\n- Vùng phủ ok", "tt_dau_vao": "Chương trình KH thân thiết", "nguyen_nhan": "Nhu cầu KH"}]}, {"stt": 14, "so_hd": "QTAAA1973", "ten_kh": "ĐOÀN THANH CHIẾN", "dia_chi": "Phía sau sau lung nha 12 Võ Nguyên Giáp, Xã Gio Linh, Quảng Trị", "ky_thuat": "QTITI.HOANQ", "quan_ly": "MOPTH", "do_tuoi": "> 24T", "note": "ĐANG XỬ LÍ", "noi_dung_xl": "0984433378 : KH nkn cs liên hệ báo mạng tệ quá nên chuyển mạng khác chiều qua rồi, hết tiền trả trước ko gia hạn nữa", "checklists": []}];
 
         // Sorting state
         let currentSortColumn = 'stt';
@@ -203,7 +238,7 @@
             let headerRow = document.getElementById("tableHeaderRow");
             for (let i = 1; i <= maxCL; i++) {
                 let th = document.createElement("th");
-                th.className = "p-3 border-r border-slate-700 min-w-[280px] bg-indigo-900 text-white";
+                th.className = "min-w-[300px] bg-indigo-950 text-white text-left font-bold";
                 th.innerText = "List Lần " + i + " (Từ xa nhất)";
                 headerRow.appendChild(th);
             }
@@ -240,11 +275,11 @@
             }
 
             // Update header icons
-            ['stt', 'so_hd', 'ky_thuat', 'quan_ly', 'do_tuoi', 'note', 'ten_kh'].forEach(col => {
+            ['stt', 'so_hd', 'ky_thuat', 'quan_ly', 'do_tuoi', 'note', 'ten_kh', 'noi_dung_xl'].forEach(col => {
                 let icon = document.getElementById('sort-' + col);
                 if (icon) {
                     if (col === currentSortColumn) {
-                        icon.className = currentSortOrder === 'asc' ? 'fa-solid fa-sort-up text-orange-400 ml-1' : 'fa-solid fa-sort-down text-orange-400 ml-1';
+                        icon.className = currentSortOrder === 'asc' ? 'fa-solid fa-sort-up text-orange-400 ml-1 text-base' : 'fa-solid fa-sort-down text-orange-400 ml-1 text-base';
                     } else {
                         icon.className = 'fa-solid fa-sort text-slate-400 ml-1';
                     }
@@ -267,7 +302,8 @@
                     item.ten_kh.toLowerCase().includes(search) || 
                     item.dia_chi.toLowerCase().includes(search) || 
                     item.ky_thuat.toLowerCase().includes(search) ||
-                    item.quan_ly.toLowerCase().includes(search);
+                    item.quan_ly.toLowerCase().includes(search) ||
+                    item.noi_dung_xl.toLowerCase().includes(search);
                 
                 let matchStatus = !status || item.note === status;
                 let matchManager = !manager || item.quan_ly === manager;
@@ -299,43 +335,48 @@
 
             filtered.forEach((item, index) => {
                 let tr = document.createElement("tr");
-                tr.className = "hover:bg-orange-50/60 transition-colors";
+                tr.className = index % 2 === 0 ? "bg-white hover:bg-orange-50/80 transition-colors" : "bg-slate-50/70 hover:bg-orange-50/80 transition-colors";
 
                 let noteBadge = item.note.toUpperCase().includes("NOTOK") 
-                    ? `<span class="px-2 py-0.5 rounded text-[11px] font-bold badge-notok">${item.note}</span>`
-                    : `<span class="px-2 py-0.5 rounded text-[11px] font-bold badge-processing">${item.note}</span>`;
+                    ? `<span class="badge-notok font-extrabold">${item.note}</span>`
+                    : `<span class="badge-processing font-extrabold">${item.note}</span>`;
 
                 let clColsHtml = "";
                 for (let i = 0; i < maxCL; i++) {
                     if (i < item.checklists.length) {
                         let cl = item.checklists[i];
                         clColsHtml += `
-                            <td class="p-2.5 border-r border-gray-200 align-top bg-slate-50/50">
+                            <td class="p-3 align-top bg-slate-50/40">
                                 <div class="cl-box">
-                                    <div class="font-bold text-slate-800"><i class="fa-regular fa-clock text-blue-600 mr-1"></i>${cl.tg}</div>
-                                    <div class="text-gray-700 mt-1"><b>NV:</b> ${cl.nv} | <b>Acc tạo:</b> ${cl.acc}</div>
-                                    <div class="text-blue-800 mt-1"><b>Đầu vào:</b> ${cl.tt_dau_vao}</div>
-                                    <div class="text-red-700 font-semibold mt-0.5"><b>Nguyên nhân:</b> ${cl.nguyen_nhan}</div>
-                                    <div class="text-gray-600 italic mt-1 border-t border-gray-200 pt-1"><b>Ghi chú CC:</b> ${cl.ghi_chu_cc}</div>
-                                    <div class="text-gray-600 italic mt-0.5"><b>Ghi chú:</b> ${cl.ghi_chu}</div>
+                                    <div class="font-bold text-blue-900 text-sm"><i class="fa-regular fa-clock text-blue-600 mr-1.5"></i>${cl.tg}</div>
+                                    <div class="text-slate-800 mt-1 font-semibold"><b>NV:</b> ${cl.nv} | <b>Acc:</b> ${cl.acc}</div>
+                                    <div class="text-blue-900 mt-1"><b>Đầu vào:</b> ${cl.tt_dau_vao}</div>
+                                    <div class="text-red-700 font-bold mt-1"><b>Nguyên nhân:</b> ${cl.nguyen_nhan}</div>
+                                    <div class="text-slate-700 italic mt-1 border-t border-slate-200 pt-1"><b>Ghi chú CC:</b> ${cl.ghi_chu_cc}</div>
+                                    <div class="text-slate-700 italic mt-0.5"><b>Ghi chú:</b> ${cl.ghi_chu}</div>
                                 </div>
                             </td>
                         `;
                     } else {
-                        clColsHtml += `<td class="p-2.5 border-r border-gray-200 align-middle text-center text-gray-400 italic bg-gray-50/30">-</td>`;
+                        clColsHtml += `<td class="p-3 align-middle text-center text-slate-400 italic font-semibold bg-gray-50/20">-</td>`;
                     }
                 }
 
                 tr.innerHTML = `
-                    <td class="p-3 text-center font-bold text-gray-500 border-r border-gray-200">${item.stt}</td>
-                    <td class="p-3 font-bold text-blue-700 border-r border-gray-200 whitespace-nowrap">${item.so_hd}</td>
-                    <td class="p-3 font-medium border-r border-gray-200">${item.ky_thuat}</td>
-                    <td class="p-3 text-gray-700 border-r border-gray-200">${item.quan_ly}</td>
-                    <td class="p-3 text-center border-r border-gray-200"><span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded font-semibold text-[11px]">${item.do_tuoi}</span></td>
-                    <td class="p-3 text-center border-r border-gray-200">${noteBadge}</td>
-                    <td class="p-3 border-r border-gray-200">
-                        <span class="font-bold text-gray-900">${item.ten_kh}</span>
+                    <td class="p-3.5 text-center font-extrabold text-slate-600">${item.stt}</td>
+                    <td class="p-3.5 font-extrabold text-blue-700 whitespace-nowrap text-sm">${item.so_hd}</td>
+                    <td class="p-3.5 font-bold text-slate-800">${item.ky_thuat}</td>
+                    <td class="p-3.5 font-bold text-slate-700">${item.quan_ly}</td>
+                    <td class="p-3.5 text-center"><span class="bg-slate-200 text-slate-800 px-2.5 py-1 rounded font-bold text-xs">${item.do_tuoi}</span></td>
+                    <td class="p-3.5 text-center">${noteBadge}</td>
+                    <td class="p-3.5">
+                        <span class="font-extrabold text-slate-900 text-sm">${item.ten_kh}</span>
                         <span class="text-address"><i class="fa-solid fa-location-dot mr-1"></i>${item.dia_chi}</span>
+                    </td>
+                    <td class="p-3.5 align-top">
+                        <div class="content-xl-box">
+                            <i class="fa-solid fa-clipboard-check text-orange-600 mr-1.5 text-sm"></i>${item.noi_dung_xl || '-'}
+                        </div>
                     </td>
                     ${clColsHtml}
                 `;
